@@ -14,4 +14,6 @@ export default HeaderComponent;
 
 const HeaderWrapper = styled.div`
   text-align: center;
+  //background: #8158F5;
+  background: #692DB7;
 `;

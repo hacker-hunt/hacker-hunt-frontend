@@ -13,4 +13,5 @@ export default FooterComponent;
 
 const FooterWrapper = styled.div`
   text-align: center;
+  background: #692DB7;
 `;

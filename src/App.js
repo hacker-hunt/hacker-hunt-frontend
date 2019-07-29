@@ -24,4 +24,5 @@ const AppWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
+  background: #34314F;
 `;
