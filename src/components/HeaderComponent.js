@@ -32,7 +32,7 @@ export default HeaderComponent;
 
 const HeaderWrapper = styled.div`
 height: 60px;
-background: #3b3f3f;
+background: #692DB7;
 .container {
   display: flex;
   align-items: center;
@@ -79,5 +79,4 @@ nav {
     color: #7dcdbe !important;
   }
 }
-
 `;
