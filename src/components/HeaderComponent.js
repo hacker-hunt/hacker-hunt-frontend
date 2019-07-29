@@ -43,8 +43,8 @@ background: #692DB7;
 }
 .logo {
   img {
-    width: 32px;
-    height: 44px;
+    width: 44px;
+    height: 64px;
   }
 }
 h1 {
