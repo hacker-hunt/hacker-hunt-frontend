@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const HeaderComponent = () => {
   return (
       <HeaderWrapper>
-        <h1>Hacker Hunter</h1>
+        <h1>Hacker Hunt</h1>
       </HeaderWrapper>
 
   );
