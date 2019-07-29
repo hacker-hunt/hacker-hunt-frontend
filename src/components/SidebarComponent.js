@@ -1,21 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const SidebarComponent = () => {
+const SidebarComponent = ({
+  title,
+  players
+}) => {
   return (
-      <SidebarWrapper>
-        <h1>Sidebar</h1>
-      </SidebarWrapper>
+    <StyledSidebar>
+      
+    </StyledSidebar>
   );
 };
 
-export default SidebarComponent;
-
-const SidebarWrapper = styled.div`
-  background: #d7d5e5;
-  height: 85vh;
-  width: 250px;
-  h1 {
-    color: #34314F;
-  }
+const StyledSidebar = styled.div`
+  width: 25%;
+  height: 600%;
+  padd
+  display: flex;
+  flex-direction: column;
+  background: #d3e5e5;
+  animation: 1s ease-in-out;
 `;
+
+export default SidebarComponent;
