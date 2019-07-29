@@ -32,5 +32,52 @@ export default HeaderComponent;
 
 const HeaderWrapper = styled.div`
 height: 60px;
+background: #3b3f3f;
+.container {
+  display: flex;
+  align-items: center;
+  color: white;
+  width: 90%;
+  height: 100%;
+  margin: 0 auto;
+}
+.logo {
+  img {
+    width: 32px;
+    height: 44px;
+  }
+}
+h1 {
+  margin-right: auto;
+  margin-left: auto;
+  font-size: 3.6rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+nav {
+  a,
+  a:visited {
+    color: #e5e5e5;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+    transform-origin: bottom;
+    padding: 0 0.5rem;
+    &:not(:last-child) {
+      margin-right: 2rem;
+    }
+    &:hover {
+      color: #7dcdbe;
+    }
+    span {
+      margin-left: 1rem;
+    }
+  }
+  .active {
+    color: #7dcdbe !important;
+  }
+}
 
 `;
