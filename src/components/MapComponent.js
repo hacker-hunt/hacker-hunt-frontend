@@ -49,13 +49,13 @@ class MapComponent extends Component {
     return (
       <MapWrapper>
         <FlexibleXYPlot>
+          {lineDisplay}
           <MarkSeries
             data={coordinates}
             color="#FFC15E"
             strokeWidth={1}
             className="mark-series"
           />
-          {lineDisplay}
         </FlexibleXYPlot>
       </MapWrapper>
     );
@@ -72,6 +72,7 @@ const MapWrapper = styled.div`
     text-align: center;
   }
   .mark-series {
+    z-index: 1000 !important;
     &:hover {
       cursor: pointer;
     }
