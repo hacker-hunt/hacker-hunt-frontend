@@ -37,8 +37,8 @@ background: #692DB7;
 }
 .logo {
   img {
-    width: 44px;
-    height: 64px;
+    height: 44px;
+    weight:bold;
   }
 }
 h1 {
@@ -63,14 +63,14 @@ nav {
       margin-right: 2rem;
     }
     &:hover {
-      color: #7dcdbe;
+      color: white;
     }
     span {
       margin-left: 1rem;
     }
   }
   .active {
-    color: #7dcdbe !important;
+    color: #f2af58 !important;
   }
 }
   text-align: center;
