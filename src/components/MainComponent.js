@@ -7,10 +7,10 @@ import SidebarComponent from './SidebarComponent';
 const MainComponent = (props) => {
   const { mapGraph } = props;
   return (
-      <MainWrapper>
-        <SidebarComponent />
-        <MapComponent mapGraph={mapGraph} />
-      </MainWrapper>
+    <MainWrapper>
+      <SidebarComponent />
+      <MapComponent mapGraph={mapGraph} />
+    </MainWrapper>
   );
 };
 
