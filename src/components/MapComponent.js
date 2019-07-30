@@ -42,6 +42,7 @@ class MapComponent extends Component {
           color="#8158FC"
           strokeWidth={1}
           className="line-series"
+          key={`line-series${index}`}
         />
       );
     });
