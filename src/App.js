@@ -20,7 +20,7 @@ class App extends Component {
       players: [],
       items: [],
       exits: [],
-      cooldown: null,
+      cooldown: 0,
       errors: [],
       messages: [],
       name: '',
@@ -87,12 +87,44 @@ class App extends Component {
   //
   // };
   //
-  // takeItem = () => {
   //
   // };
+  takeItem = async (name) => {
+    try {
+      const config = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+        })
+      };
+      const response = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/take/', config);
+      const jsonResponse = await response.json();
+      if (jsonResponse.items) {
+        this.setState(prevState => ({
+          inventory: [...prevState.inventory, ...jsonResponse.items],
+        }));
+      }
+      if (jsonResponse.cooldown) {
+        this.setState(prevState => ({
+          cooldown: prevState.cooldown + jsonResponse.cooldown,
+        }));
+      }
+      if (jsonResponse.errors) {
+        this.setState(prevState => ({
+          messages: [...prevState.messages, ...jsonResponse.errors]
+        }));
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
 
   render() {
-    const { mapGraph, messages, isExploring, description, room_id, coordinates, title, items, players, gold, strength, speed, encumbrance, inventory } = this.state;
+    const { mapGraph, messages, isExploring, description, room_id, coordinates, title, items, players, gold, strength, speed, encumbrance, inventory, name, cooldown } = this.state;
     return (
       <AppWrapper>
         <HeaderComponent />
@@ -109,8 +141,16 @@ class App extends Component {
             speed={speed}
             encumbrance={encumbrance}
             inventory={inventory}
+            cooldown={cooldown}
         />
-        <FooterComponent messages={messages} handleExplore={this.handleExplore} isExploring={isExploring} manualMove={this.manualMove}/>
+        <FooterComponent
+            messages={messages}
+            handleExplore={this.handleExplore}
+            isExploring={isExploring}
+            manualMove={this.manualMove}
+            takeItem={this.takeItem}
+            name={name}
+        />
       </AppWrapper>
     );
   }

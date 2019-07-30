@@ -2,10 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 const SidebarComponent = (props) => {
-  const { description, roomId, coordinates, title, items, players, gold, encumbrance, strength, speed, inventory } = props;
+  const { description, roomId, coordinates, title, items, players, gold, encumbrance, strength, speed, inventory, cooldown } = props;
   return (
       <SidebarWrapper>
         <div className="room-info">
+          <p>Cooldown: {cooldown}</p>
           <h1>Room {roomId}<span> {coordinates}</span></h1>
           <h2>{title}</h2>
           <p>{ description }</p>
