@@ -1,8 +1,6 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import ProgressBar from './ProgressBar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { PlayerLoader } from './Loaders';
 
 /*
@@ -44,7 +42,7 @@ items
             <div className="player-id">
               <h2>name:</h2>
               <div className="gold-info">
-                <FontAwesomeIcon icon={faDollarSign} /> <span>{gold}</span>
+                <i className="fas fa-dollar-sign" /> <span>{gold}</span>
               </div>
             </div>
             <div className="player-stats">
