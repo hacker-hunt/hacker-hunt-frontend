@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMap, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import logo from '../img/logo.png';
 import { NavLink } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ const HeaderComponent = () => {
         <h1>Treasure Hunt</h1>
         <nav>
           <NavLink exact to="/">
-            <FontAwesomeIcon icon={faMap} />
+            <i className="fas fa-map" />
             <span>Map</span>
           </NavLink>
           <NavLink to="/about">
