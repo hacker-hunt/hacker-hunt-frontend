@@ -39,7 +39,7 @@ class MapComponent extends Component {
       return (
         <LineSeries
           data={connections}
-          color="#8158FC"
+          color="#5C578C"
           strokeWidth={1}
           className="line-series"
           key={`line-series${index}`}
@@ -55,6 +55,7 @@ class MapComponent extends Component {
             data={coordinates}
             color="#FFC15E"
             strokeWidth={1}
+            size={4}
             className="mark-series"
           />
         </FlexibleXYPlot>
