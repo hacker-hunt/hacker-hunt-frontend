@@ -54,8 +54,6 @@ const SidebarComponent = (props) => {
   );
 };
 
-export default SidebarComponent;
-
 const SidebarWrapper = styled.div`
   background: #d7d5e5;
   height: 85vh;
