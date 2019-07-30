@@ -16,10 +16,6 @@ const HeaderComponent = () => {
             <i className="fas fa-map" />
             <span>Map</span>
           </NavLink>
-          <NavLink to="/about">
-            <i className="fas fa-info-circle" />
-            <span>About</span>
-          </NavLink>
         </nav>
       </div>
     </HeaderWrapper>
