@@ -5,7 +5,6 @@ import MainComponent from './components/MainComponent';
 import FooterComponent from './components/FooterComponent';
 
 import mapGraph from './data.json';
-import './App.css';
 
 class App extends Component {
   constructor(props) {
@@ -35,6 +34,22 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    this.initialRequest();
+  }
+
+  initialRequest = async () => {
+    const config = {
+      method: 'GET',
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+    };
+    const response = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/init/', config);
+    const json = await response.json();
+    this.setState({...this.state, ...json });
+  };
+
   handleExplore = () => {
     const { isExploring } = this.state;
     if (!isExploring) {
@@ -61,7 +76,6 @@ class App extends Component {
     };
     const response = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/move/', config);
     const json = await response.json();
-    console.log(json);
     this.setState({...this.state, ...json });
   };
   //
@@ -78,11 +92,24 @@ class App extends Component {
   // };
 
   render() {
-    const { mapGraph, messages, isExploring } = this.state;
+    const { mapGraph, messages, isExploring, description, room_id, coordinates, title, items, players, gold, strength, speed, encumbrance, inventory } = this.state;
     return (
       <AppWrapper>
         <HeaderComponent />
-        <MainComponent mapGraph={mapGraph} />
+        <MainComponent
+            mapGraph={mapGraph}
+            description={description}
+            roomId={room_id}
+            coordinates={coordinates}
+            title={title}
+            items={items}
+            players={players}
+            gold={gold}
+            strength={strength}
+            speed={speed}
+            encumbrance={encumbrance}
+            inventory={inventory}
+        />
         <FooterComponent messages={messages} handleExplore={this.handleExplore} isExploring={isExploring} manualMove={this.manualMove}/>
       </AppWrapper>
     );
