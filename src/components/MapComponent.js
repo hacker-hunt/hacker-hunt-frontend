@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { XYPlot, LineSeries, MarkSeries } from 'react-vis';
+import { FlexibleXYPlot, LineSeries, MarkSeries } from 'react-vis';
 
 class MapComponent extends Component {
   render() {
@@ -8,14 +8,22 @@ class MapComponent extends Component {
     const values = Object.values(mapGraph);
     const coordinates = values.map(coordinate => coordinate[0]);
     const exits = values.map(exit => exit[1]);
-    console.log(exits);
     return (
-        <MapWrapper>
-          <XYPlot height={400} width={800}>
-            <LineSeries data={exits} color="#8158FC"/>
-            <MarkSeries data={coordinates} color="#FFC15E"/>
-          </XYPlot>
-        </MapWrapper>
+      <MapWrapper>
+        <FlexibleXYPlot>
+          <LineSeries
+            data={exits}
+            color="#8158FC"
+            className="line-series"
+          />
+          <MarkSeries
+            data={coordinates}
+            color="#FFC15E"
+            strokeWidth={1}
+            className="mark-series"
+          />
+        </FlexibleXYPlot>
+      </MapWrapper>
     );
   }
 }
@@ -23,9 +31,16 @@ class MapComponent extends Component {
 export default MapComponent;
 
 const MapWrapper = styled.div`
-  min-width: 600px;
+  //min-width: 600px;
   width: 100%;
+  height: 100%;
+  padding: 2.5rem;
   h1 {
     text-align: center;
+  }
+  .mark-series {
+    &:hover {
+      cursor: pointer;
+    }
   }
 `;
