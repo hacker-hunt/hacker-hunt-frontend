@@ -48,9 +48,22 @@ class App extends Component {
   };
 
   // Navigation methods
-  // manualMove = () => {
-  //
-  // };
+  manualMove = async (direction) => {
+    const config = {
+      method: 'POST',
+      headers: {
+        Authorization: localStorage.getItem('token'),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        direction,
+      })
+    };
+    const response = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/move/', config);
+    const json = await response.json();
+    console.log(json);
+    this.setState({...this.state, ...json });
+  };
   //
   // travelToShop = () => {
   //
@@ -70,7 +83,7 @@ class App extends Component {
       <AppWrapper>
         <HeaderComponent />
         <MainComponent mapGraph={mapGraph} />
-        <FooterComponent messages={messages} handleExplore={this.handleExplore} isExploring={isExploring} />
+        <FooterComponent messages={messages} handleExplore={this.handleExplore} isExploring={isExploring} manualMove={this.manualMove}/>
       </AppWrapper>
     );
   }
