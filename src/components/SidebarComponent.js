@@ -12,16 +12,58 @@ This component displays most of the information retrieved from the API.
 const SidebarComponent = ({
 title,
 players,
-room
+room,
+gold,
+strength,
+speed,
+encumbrance,
+items
 }) => {
   return (
     <StyledSidebar>
       <div className="room">
         <>
           <h2 className="room-id">
-            Room 
+            Room
           </h2>
-
+          <div className="room-info info">
+            <h3>title: {title}</h3>
+            <p></p>
+          </div>
+          <div className="info">
+            <h3>Items:{items}</h3>
+            
+          </div>
+          <div className="info">
+            <h3>Players</h3>
+          </div>
+        </>
+      </div>
+      <div className="player">
+          <>
+            <div className="player-id">
+              <h2>name:</h2>
+              <div className="gold-info">
+                <FontAwesomeIcon icon={faDollarSign} /> <span>{gold}</span>
+              </div>
+            </div>
+            <div className="player-stats">
+              <ul>
+                <li className="inventory">
+                  Inventory:
+                </li>
+                <li>
+                  Encumbrance: <span>{encumbrance}</span>
+                </li>
+                <li>
+                  Strength: <span>{strength}</span>
+                </li>
+                <li>
+                  Speed: <span>{speed}</span>
+                </li>
+              </ul>
+            
+            </div>
           </>
       </div>
     </StyledSidebar>
