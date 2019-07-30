@@ -3,25 +3,25 @@ import styled from 'styled-components';
 
 const CardinalsComponent = () => {
   return (
-      <CardinalsWrapper>
-        <div className="row">
-          <span />
-            <button onClick={() => console.log('you go north')}>N</button>
-          <span />
-        </div>
+    <CardinalsWrapper>
+      <div className="row">
+        <span />
+          <button onClick={() => console.log('you go north')}>N</button>
+        <span />
+      </div>
 
-        <div className="row">
-          <button onClick={() => console.log('you go west')}>W</button>
-          <span />
-          <button className="cardinal-point" onClick={() => console.log('you go east')}>E</button>
-        </div>
+      <div className="row">
+        <button onClick={() => console.log('you go west')}>W</button>
+        <span />
+        <button className="cardinal-point" onClick={() => console.log('you go east')}>E</button>
+      </div>
 
-        <div className="row">
-          <span />
-          <button onClick={() => console.log('you go south')}>S</button>
-          <span />
-        </div>
-      </CardinalsWrapper>
+      <div className="row">
+        <span />
+        <button onClick={() => console.log('you go south')}>S</button>
+        <span />
+      </div>
+    </CardinalsWrapper>
   )
 };
 
