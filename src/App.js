@@ -35,16 +35,43 @@ class App extends Component {
     };
   }
 
+  handleExplore = () => {
+    const { isExploring } = this.state;
+    if (!isExploring) {
+      this.setState({ isExploring: true, messages: ['Initiating auto-exploration mode.'] });
+    } else {
+      this.setState({
+        isExploring: false,
+        messages: ['Auto-exploration mode interrupted.']
+      });
+    }
+  };
 
+  // Navigation methods
+  // manualMove = () => {
+  //
+  // };
+  //
+  // travelToShop = () => {
+  //
+  // };
+  //
+  // sellItems = () => {
+  //
+  // };
+  //
+  // takeItem = () => {
+  //
+  // };
 
   render() {
-    const { mapGraph, messages } = this.state;
+    const { mapGraph, messages, isExploring } = this.state;
     return (
-        <AppWrapper>
-          <HeaderComponent />
-          <MainComponent mapGraph={mapGraph} />
-          <FooterComponent messages={messages}/>
-        </AppWrapper>
+      <AppWrapper>
+        <HeaderComponent />
+        <MainComponent mapGraph={mapGraph} />
+        <FooterComponent messages={messages} handleExplore={this.handleExplore} isExploring={isExploring} />
+      </AppWrapper>
     );
   }
 }

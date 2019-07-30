@@ -4,28 +4,28 @@ import styled from 'styled-components';
 import CardinalsComponent from './CardinalsComponent';
 
 const FooterComponent = (props) => {
-  const { messages, isExploring } = props;
+  const { messages, isExploring, handleExplore } = props;
   return (
-      <FooterWrapper>
-        <CardinalsComponent />
-        <div className="action-icons">
-          <i className="fas fa-store-alt" />
-          <i className="fas fa-dollar-sign" />
-          <i className="fas fa-hand-paper" />
+    <FooterWrapper>
+      <CardinalsComponent />
+      <div className="action-icons">
+        <i className="fas fa-store-alt" />
+        <i className="fas fa-dollar-sign" />
+        <i className="fas fa-hand-paper" />
+      </div>
+      <div className="messages">
+        <button onClick={() => handleExplore()}>{isExploring ? 'EXPLORING...' : 'EXPLORE'}</button>
+        <div>
+          {!messages.length ? (
+            <p>Click EXPLORE to start exploring.</p>
+          ) : (
+            messages.map(message => (
+                <p key={message}>{message}</p>
+            ))
+          )}
         </div>
-        <div className="messages">
-          <button onClick={() => console.log('Exploring...')}>{isExploring ? 'EXPLORING...' : 'EXPLORE'}</button>
-          <div>
-            {!messages.length ? (
-              <p>Click EXPLORE to start exploring.</p>
-            ) : (
-              messages.map(message => (
-                  <p>{message}</p>
-              ))
-            )}
-          </div>
-        </div>
-      </FooterWrapper>
+      </div>
+    </FooterWrapper>
   );
 };
 
@@ -36,10 +36,13 @@ const FooterWrapper = styled.div`
   background: #692DB7;
   display: flex;
   align-items: center;
+  padding: 1rem 0;
+  box-shadow: 0 4px 12px 2px #1f1d30;
   .action-icons {
+  padding: 1.5rem;
     i {
-      padding: 2rem;
-      font-size: 3rem;
+      padding-right: 1.5rem;
+      font-size: 2.4rem;
       color: #FFFFFF;
       &:hover {
         cursor: pointer;
@@ -58,11 +61,13 @@ const FooterWrapper = styled.div`
       padding-left: 1.5rem;
     }
     button {
-      padding: 1rem 2rem;
+      width: 180px;
+      padding: 0 2rem;
       border-radius: 4px;
       font-size: 2rem;
       color: #34314F;
-      font-weight: 500;
+      font-weight: 700;
+      font-family: 'Changa', sans-serif;
       &:hover {
         cursor: pointer;
         background: #d7d5e5;
