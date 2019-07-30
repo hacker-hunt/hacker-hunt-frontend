@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import ProgressBar from './ProgressBar';
-import { PlayerLoader } from './Loaders';
 
 const SidebarComponent = (props) => {
   const { description, roomId, coordinates, title, items, players, gold, encumbrance, strength, speed, inventory } = props;
