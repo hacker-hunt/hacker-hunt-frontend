@@ -17,5 +17,6 @@ const HeaderWrapper = styled.div`
   //background: #8158F5;
   background: #692DB7;
   font-family: 'Luckiest Guy', cursive;
-  box-shadow: 0 4px 12px -2px #1f1d30;
+  box-shadow: 0 1px 12px -2px #1f1d30;
+  z-index: 2;
 `;

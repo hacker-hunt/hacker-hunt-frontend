@@ -37,7 +37,7 @@ const FooterWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 1rem 0;
-  box-shadow: 0 4px 12px 2px #1f1d30;
+  box-shadow: 0 1px 12px 2px #1f1d30;
   .action-icons {
   padding: 1.5rem;
     i {
