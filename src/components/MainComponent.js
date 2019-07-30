@@ -4,11 +4,12 @@ import styled from 'styled-components';
 import MapComponent from './MapComponent';
 import SidebarComponent from './SidebarComponent';
 
-const MainComponent = () => {
+const MainComponent = (props) => {
+  const { mapGraph } = props;
   return (
       <MainWrapper>
         <SidebarComponent />
-        <MapComponent />
+        <MapComponent mapGraph={mapGraph} />
       </MainWrapper>
   );
 };
