@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import CardinalsComponent from './CardinalsComponent';
 
 const FooterComponent = (props) => {
-  const { messages, isExploring, handleExplore } = props;
+  const { messages, isExploring, handleExplore, manualMove } = props;
   return (
     <FooterWrapper>
-      <CardinalsComponent />
+      <CardinalsComponent manualMove={manualMove}/>
       <div className="action-icons">
         <i className="fas fa-store-alt" />
         <i className="fas fa-dollar-sign" />

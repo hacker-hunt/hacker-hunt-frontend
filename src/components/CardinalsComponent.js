@@ -1,24 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const CardinalsComponent = () => {
+const CardinalsComponent = (props) => {
+  const { manualMove } = props;
   return (
     <CardinalsWrapper>
       <div className="row">
         <span />
-          <button onClick={() => console.log('you go north')}>N</button>
+          <button onClick={() => manualMove('n')}>N</button>
         <span />
       </div>
 
       <div className="row">
-        <button onClick={() => console.log('you go west')}>W</button>
+        <button onClick={() => manualMove('w')}>W</button>
         <span />
-        <button className="cardinal-point" onClick={() => console.log('you go east')}>E</button>
+        <button className="cardinal-point" onClick={() => manualMove('e')}>E</button>
       </div>
 
       <div className="row">
         <span />
-        <button onClick={() => console.log('you go south')}>S</button>
+        <button onClick={() => manualMove('s')}>S</button>
         <span />
       </div>
     </CardinalsWrapper>

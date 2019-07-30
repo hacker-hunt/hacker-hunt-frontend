@@ -3,79 +3,93 @@ import styled from 'styled-components';
 import ProgressBar from './ProgressBar';
 import { PlayerLoader } from './Loaders';
 
-/*
-This component displays most of the information retrieved from the API.
-*/
-
-const SidebarComponent = ({
-title,
-players,
-room,
-gold,
-strength,
-speed,
-encumbrance,
-items
-}) => {
+const SidebarComponent = (props) => {
+  const { description, roomId, coordinates, title, items, players, gold, encumbrance, strength, speed, inventory } = props;
   return (
-    <StyledSidebar>
-      <div className="room">
-        <>
-          <h2 className="room-id">
-            Room
-          </h2>
-          <div className="room-info info">
-            <h3>title: {title}</h3>
-            <p></p>
+      <SidebarWrapper>
+        <div className="room-info">
+          <h1>Room {roomId}<span> {coordinates}</span></h1>
+          <h2>{title}</h2>
+          <p>{ description }</p>
+          <h2>Items</h2>
+          {!items.length ? (
+              <p>There are no items in this room.</p>
+          ) : (
+              items.map(item => (
+                  <p key={roomId}>{item}</p>
+              ))
+          )}
+        </div>
+
+        <div className="player-info">
+          <h2>Players</h2>
+          {!players.length ? (
+              <p>There are no players in this room.</p>
+          ) : (
+              players.map(player => (
+                  <p key={roomId}>{player}</p>
+              ))
+          )}
+          <div className="fortune">
+            <h2>Gold</h2>
+            <span> $ {gold}</span>
           </div>
-          <div className="info">
-            <h3>Items:{items}</h3>
-            
+
+          <div className="powers">
+            <p>Encumbrance: {encumbrance}</p>
+            <p>Strength: {strength}</p>
+            <p>Speed: {speed}</p>
+            <p>Inventory: {inventory}</p>
+            {!inventory.length ? (
+                <p>Your inventory is currently empty</p>
+            ) : (
+                inventory.map(inventoryItem => (
+                    <p key={roomId}>{inventoryItem}</p>
+                ))
+            )}
           </div>
-          <div className="info">
-            <h3>Players</h3>
-          </div>
-        </>
-      </div>
-      <div className="player">
-          <>
-            <div className="player-id">
-              <h2>name:</h2>
-              <div className="gold-info">
-                <i className="fas fa-dollar-sign" /> <span>{gold}</span>
-              </div>
-            </div>
-            <div className="player-stats">
-              <ul>
-                <li className="inventory">
-                  Inventory:
-                </li>
-                <li>
-                  Encumbrance: <span>{encumbrance}</span>
-                </li>
-                <li>
-                  Strength: <span>{strength}</span>
-                </li>
-                <li>
-                  Speed: <span>{speed}</span>
-                </li>
-              </ul>
-            
-            </div>
-          </>
-      </div>
-    </StyledSidebar>
+        </div>
+
+      </SidebarWrapper>
   );
 };
 
-const StyledSidebar = styled.div`
-  width: 25%;
-  padding:0.5rem;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: #fff;
+export default SidebarComponent;
+
+const SidebarWrapper = styled.div`
+  background: #d7d5e5;
+  height: 85vh;
+  width: 300px;
+  padding: 1.5rem;
+  h1 {
+    color: #34314F;
+    font-family: 'Changa', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+  }
+  p {
+    font-size: 1.6rem;
+    color: #34314F
+  }
+  span {
+    color: #692DB7;
+  }
   
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    padding: 1rem 0;
+    color: #34314F
+  }
+  .fortune {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span {
+      font-size: 1.6rem;
+      color: #34314F
+    }
+  }
 `;
 
 export default SidebarComponent;

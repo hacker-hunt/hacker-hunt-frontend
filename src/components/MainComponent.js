@@ -5,10 +5,22 @@ import MapComponent from './MapComponent';
 import SidebarComponent from './SidebarComponent';
 
 const MainComponent = (props) => {
-  const { mapGraph } = props;
+  const { mapGraph, description, roomId, coordinates, title, items, players, gold, encumbrance, speed, strength, inventory } = props;
   return (
     <MainWrapper>
-      <SidebarComponent />
+      <SidebarComponent
+          description={description}
+          roomId={roomId}
+          coordinates={coordinates}
+          title={title}
+          items={items}
+          players={players}
+          gold={gold}
+          strength={strength}
+          speed={speed}
+          encumbrance={encumbrance}
+          inventory={inventory}
+      />
       <MapComponent mapGraph={mapGraph} />
     </MainWrapper>
   );
