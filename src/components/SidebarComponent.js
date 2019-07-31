@@ -15,6 +15,11 @@ const SidebarComponent = props => {
     speed,
     inventory,
     cooldown,
+    name,
+    examinedName,
+    examinedDescription,
+    examinedWeight,
+    examineItem
   } = props;
   return (
     <SidebarWrapper>
@@ -27,11 +32,25 @@ const SidebarComponent = props => {
         <h2>{title}</h2>
         <p>{description}</p>
         <h2>Items</h2>
-        {!items.length ? (
-          <p>There are no items in this room.</p>
-        ) : (
-          items.map(item => <p>{item}</p>)
-        )}
+        <div className="items-list">
+          {!items.length ? (
+              <p>There are no items in this room.</p>
+          ) : (
+              items.map(item => <button onClick={() => examineItem(item)}>{item}</button>)
+          )}
+        </div>
+        <div className="items-details">
+          {!examinedName ? (
+              <p>Click an item to examine it.</p>
+          ): (
+              <div className="item-details">
+                <p>Name: {examinedName}</p>
+                <p>Description: {examinedDescription}</p>
+                <p>Weight: {examinedWeight}</p>
+              </div>
+          )}
+        </div>
+
       </div>
 
       <div className="player-info">
@@ -52,7 +71,7 @@ const SidebarComponent = props => {
           <p>Speed: {speed}</p>
           <p>Inventory: {
             inventory.length
-            ? inventory.map(inventoryItem => <p>{inventoryItem}</p>)
+            ? inventory.map(inventoryItem => <button>{inventoryItem}</button>)
             : "Your inventory is empty"
           }</p>
         </div>
@@ -85,6 +104,36 @@ const SidebarWrapper = styled.div`
     font-weight: 700;
     padding: 1rem 0;
     color: #34314f;
+  }
+  .items-list {
+    display: flex;
+    flex-direction: column;
+    button {
+      padding: 0.3rem;
+      border-radius: 3px;
+      margin: 0.2rem 0;
+      font-size: 1.4rem;
+      background: #FFFFFF;
+      color: #34314f;
+      &:hover {
+      cursor: pointer;
+      }
+    }
+  }
+  
+  .items-details {
+    height: 80px;
+    padding: 1rem;
+    background: #34314f;
+    p {
+      color: #FFFFFF;
+      font-size: 1.4rem;
+      font-weight: 200;
+    }
+    .item-details {
+      color: white;
+      font-size: 1.4rem;
+    }
   }
   .fortune {
     display: flex;

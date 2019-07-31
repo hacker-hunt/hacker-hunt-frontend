@@ -31,6 +31,9 @@ class App extends Component {
       speed: null,
       status: [],
       isExploring: false,
+      examinedName: '',
+      examinedDescription: '',
+      examinedWeight: 0,
     };
   }
 
@@ -129,17 +132,35 @@ class App extends Component {
 
     this.handleCooldownCounter();
   };
-  //
-  // travelToShop = () => {
-  //
-  // };
-  //
-  // sellItems = () => {
-  //
-  // };
-  //
-  //
-  // };
+
+  examineItem = async (name) => {
+    try {
+      const config = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+        }),
+      };
+      const response = await fetch(
+          'https://lambda-treasure-hunt.herokuapp.com/api/adv/examine/',
+          config,
+      );
+      const jsonResponse = await response.json();
+      this.setState(prevState => ({
+        examinedName: jsonResponse.name,
+        examinedDescription: jsonResponse.description,
+        examinedWeight: jsonResponse.weight
+      }));
+      console.log(jsonResponse);
+    } catch (error) {
+        throw error;
+    }
+  };
+
   takeItem = async name => {
     try {
       const config = {
@@ -195,6 +216,9 @@ class App extends Component {
       inventory,
       name,
       cooldown,
+      examinedName,
+      examinedDescription,
+      examinedWeight
     } = this.state;
     return (
       <AppWrapper>
@@ -213,6 +237,11 @@ class App extends Component {
           encumbrance={encumbrance}
           inventory={inventory}
           cooldown={cooldown}
+          examineItem={this.examineItem}
+          name={name}
+          examinedName={examinedName}
+          examinedDescription={examinedDescription}
+          examinedWeight={examinedWeight}
         />
         <FooterComponent
           messages={messages}

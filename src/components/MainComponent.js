@@ -5,7 +5,7 @@ import MapComponent from './MapComponent';
 import SidebarComponent from './SidebarComponent';
 
 const MainComponent = (props) => {
-  const { mapGraph, description, roomId, coordinates, title, items, players, gold, encumbrance, speed, strength, inventory, cooldown } = props;
+  const { mapGraph, description, roomId, coordinates, title, items, players, gold, encumbrance, speed, strength, inventory, cooldown, examineItem, name, examinedName, examinedWeight, examinedDescription } = props;
   return (
     <MainWrapper>
       <SidebarComponent
@@ -21,6 +21,11 @@ const MainComponent = (props) => {
           encumbrance={encumbrance}
           inventory={inventory}
           cooldown={cooldown}
+          examineItem={examineItem}
+          name={name}
+          examinedName={examinedName}
+          examinedDescription={examinedDescription}
+          examinedWeight={examinedWeight}
       />
       <MapComponent mapGraph={mapGraph} />
     </MainWrapper>
