@@ -48,7 +48,43 @@ class App extends Component {
     const response = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/init/', config);
     const json = await response.json();
     this.setState({...this.state, ...json });
+    this.handleCooldownCounter()
+
+    // Grab player status and display on mount
+    this.playerstatus()
+    this.handleCooldownCounter()
   };
+
+// Gets player status when called after cooldown is finished
+playerstatus = () => {setTimeout(async () => {
+    const statusConfig = {
+      method: 'POST',
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+    };
+    const statusResponse = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/status/', statusConfig);
+    const statusJson = await statusResponse.json();
+    this.setState({...this.state, ...statusJson });
+  }, (this.state.cooldown) * 1000)}
+
+// Displays an up to date counter of current cooldown time
+handleCooldownCounter = () => {
+  const cooldownCounterStop = () => {
+    clearInterval(moveCountdown)
+  }
+  const cooldownCounter = () => {
+    if (this.state.cooldown > 0){
+      this.setState(prevState => ({
+        cooldown: prevState.cooldown -= 1
+      }))
+    }
+    else{
+      cooldownCounterStop()
+    }
+  }
+  const moveCountdown = setInterval(cooldownCounter, 1000)
+}
 
   handleExplore = () => {
     const { isExploring } = this.state;
@@ -77,6 +113,9 @@ class App extends Component {
     const response = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/move/', config);
     const json = await response.json();
     this.setState({...this.state, ...json });
+    
+    this.handleCooldownCounter()
+
   };
   //
   // travelToShop = () => {
