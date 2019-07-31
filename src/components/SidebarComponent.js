@@ -19,7 +19,8 @@ const SidebarComponent = props => {
     examinedName,
     examinedDescription,
     examinedWeight,
-    examineItem
+    examineItem,
+    dropItem,
   } = props;
   return (
     <SidebarWrapper>
@@ -31,19 +32,12 @@ const SidebarComponent = props => {
         </h1>
         <h2>{title}</h2>
         <p>{description}</p>
-        <h2>Items</h2>
-        <div className="items-list">
-          {!items.length ? (
-              <p>There are no items in this room.</p>
-          ) : (
-              items.map(item => <button onClick={() => examineItem(item)}>{item}</button>)
-          )}
-        </div>
-        <div className="items-details">
+
+        <div className="list-details">
           {!examinedName ? (
-              <p>Click an item to examine it.</p>
+              <p>Click an item or a player to examine.</p>
           ): (
-              <div className="item-details">
+              <div className="details">
                 <p>Name: {examinedName}</p>
                 <p>Description: {examinedDescription}</p>
                 <p>Weight: {examinedWeight}</p>
@@ -51,29 +45,44 @@ const SidebarComponent = props => {
           )}
         </div>
 
+        <h2>Items</h2>
+
+        <div className="items-list">
+          {!items.length ? (
+              <p>There are no items in this room.</p>
+          ) : (
+              items.map(item => <button className="items-players" onClick={() => examineItem(item)}>{item}</button>)
+          )}
+        </div>
       </div>
 
       <div className="player-info">
         <h2>Players</h2>
-        {!players.length ? (
-          <p>There are no players in this room.</p>
-        ) : (
-          players.map(player => <p>{player}</p>)
-        )}
+        <div className="players-list">
+          {!players.length ? (
+              <p>There are no players in this room.</p>
+          ) : (
+              players.map(player => <button className="items-players" onClick={() => examineItem(player)}>{player}</button>)
+          )}
+        </div>
+
         <div className="fortune">
-          <h2>Gold</h2>
+          <h2>{name}</h2>
           <span> $ {gold}</span>
         </div>
 
-        <div className="powers">
+        <div className="abilities">
           <p>Encumbrance: {encumbrance}</p>
           <p>Strength: {strength}</p>
           <p>Speed: {speed}</p>
-          <p>Inventory: {
+          <p>Inventory:</p>
+          <div className="inventory">
+            {
             inventory.length
-            ? inventory.map(inventoryItem => <button>{inventoryItem}</button>)
+            ? inventory.map(inventoryItem => <button className="items-players" onClick={() => dropItem(inventoryItem)}>{inventoryItem}</button>)
             : "Your inventory is empty"
-          }</p>
+          }
+          </div>
         </div>
       </div>
     </SidebarWrapper>
@@ -108,20 +117,9 @@ const SidebarWrapper = styled.div`
   .items-list {
     display: flex;
     flex-direction: column;
-    button {
-      padding: 0.3rem;
-      border-radius: 3px;
-      margin: 0.2rem 0;
-      font-size: 1.4rem;
-      background: #FFFFFF;
-      color: #34314f;
-      &:hover {
-      cursor: pointer;
-      }
-    }
   }
   
-  .items-details {
+  .list-details {
     height: 80px;
     padding: 1rem;
     background: #34314f;
@@ -130,10 +128,22 @@ const SidebarWrapper = styled.div`
       font-size: 1.4rem;
       font-weight: 200;
     }
-    .item-details {
+    .details {
       color: white;
       font-size: 1.4rem;
     }
+  }
+  
+  .items-players {
+    padding: 0.3rem;
+    border-radius: 3px;
+    margin: 0.2rem 0;
+    font-size: 1.4rem;
+    background: #FFFFFF;
+    color: #34314f;
+    &:hover {
+    cursor: pointer;
+  }
   }
   .fortune {
     display: flex;
@@ -143,6 +153,10 @@ const SidebarWrapper = styled.div`
       font-size: 1.6rem;
       color: #34314f;
     }
+  }
+  .inventory {
+    display: flex;
+    flex-direction: column;
   }
 `;
 

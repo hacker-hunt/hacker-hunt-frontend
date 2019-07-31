@@ -218,7 +218,7 @@ class App extends Component {
       cooldown,
       examinedName,
       examinedDescription,
-      examinedWeight
+      examinedWeight,
     } = this.state;
     return (
       <AppWrapper>
@@ -242,6 +242,7 @@ class App extends Component {
           examinedName={examinedName}
           examinedDescription={examinedDescription}
           examinedWeight={examinedWeight}
+          dropItem={this.dropItem}
         />
         <FooterComponent
           messages={messages}
