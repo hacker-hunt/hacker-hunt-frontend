@@ -53,7 +53,7 @@ const SidebarComponent = props => {
           <p>Inventory: {
             inventory.length
             ? inventory.map(inventoryItem => <p>{inventoryItem}</p>)
-            : "Your inventory is empty."
+            : "There are no items in your inventory."
           }</p>
         </div>
       </div>
