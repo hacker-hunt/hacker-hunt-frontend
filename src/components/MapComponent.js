@@ -28,9 +28,14 @@ const getConnections = (currentCoordinates, directionData, values) => {
 };
 
 class MapComponent extends Component {
+  state = {
+    roomValue: null
+  };
   render() {
-    const {mapGraph} = this.props;
+    const { roomValue } = this.state;
+    const {mapGraph } = this.props;
     const values = Object.values(mapGraph);
+    const keys = Object.keys(mapGraph);
     const coordinates = values.map(coordinate => coordinate[0]);
     const exits = values.map(exit => exit[1]);
 
@@ -49,6 +54,7 @@ class MapComponent extends Component {
 
     return (
       <MapWrapper>
+        {roomValue ? <button>{roomValue}</button> : null}
         <FlexibleXYPlot>
           {lineDisplay}
           <MarkSeries
@@ -57,6 +63,18 @@ class MapComponent extends Component {
             strokeWidth={1}
             size={4}
             className="mark-series"
+            onValueMouseOver={(datapoint) => {
+              // display room number on mouseover
+              keys.map(keyValue => {
+                if (mapGraph[keyValue][0].x === datapoint.x &&
+                      mapGraph[keyValue][0].y === datapoint.y
+                ) {
+                  this.setState({ roomValue: keyValue})
+                }
+                return keyValue;
+              })
+            }}
+            onValueMouseOut={() => this.setState({roomValue: null})}
           />
         </FlexibleXYPlot>
       </MapWrapper>
@@ -78,5 +96,15 @@ const MapWrapper = styled.div`
     &:hover {
       cursor: pointer;
     }
+  }
+  button {
+    position: absolute;
+    right: 2rem;
+    background: none;
+    border: 2px solid #FFC15E;
+    border-radius: 4px;
+    padding: 1rem 2rem;
+    font-size: 2rem;
+    color: #FFC15E;
   }
 `;

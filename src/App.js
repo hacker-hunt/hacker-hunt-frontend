@@ -30,7 +30,7 @@ class App extends Component {
       strength: null,
       speed: null,
       status: [],
-      isExploring: false
+      isExploring: false,
     };
   }
 
