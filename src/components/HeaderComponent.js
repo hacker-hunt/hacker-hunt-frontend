@@ -16,10 +16,6 @@ const HeaderComponent = () => {
             <i className="fas fa-map" />
             <span>Map</span>
           </NavLink>
-          <NavLink to="/about">
-            <i className="fas fa-info-circle" />
-            <span>About</span>
-          </NavLink>
         </nav>
       </div>
     </HeaderWrapper>
@@ -41,8 +37,8 @@ background: #692DB7;
 }
 .logo {
   img {
-    width: 44px;
-    height: 64px;
+    height: 44px;
+    weight:bold;
   }
 }
 h1 {
@@ -67,14 +63,14 @@ nav {
       margin-right: 2rem;
     }
     &:hover {
-      color: #7dcdbe;
+      color: white;
     }
     span {
       margin-left: 1rem;
     }
   }
   .active {
-    color: #7dcdbe !important;
+    color: #f2af58 !important;
   }
 }
   text-align: center;
@@ -82,5 +78,4 @@ nav {
   background: #692DB7;
   font-family: 'Luckiest Guy', cursive;
   box-shadow: 0 1px 12px -2px #1f1d30;
-  z-index: 2;
 `;
