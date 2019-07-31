@@ -52,7 +52,6 @@ class App extends Component {
 
     // Grab player status and display on mount
     this.playerstatus()
-    this.handleCooldownCounter()
   };
 
 // Gets player status when called after cooldown is finished
@@ -66,7 +65,9 @@ playerstatus = () => {setTimeout(async () => {
     const statusResponse = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/status/', statusConfig);
     const statusJson = await statusResponse.json();
     this.setState({...this.state, ...statusJson });
-  }, (this.state.cooldown) * 1000)}
+  }, (this.state.cooldown) * 1000)
+  this.handleCooldownCounter()
+}
 
 // Displays an up to date counter of current cooldown time
 handleCooldownCounter = () => {
