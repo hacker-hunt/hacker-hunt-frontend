@@ -198,6 +198,54 @@ class App extends Component {
     }
   };
 
+  dropItem = async (name) => {
+    try {
+      const config = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+        }),
+      };
+      const response = await fetch(
+          'https://lambda-treasure-hunt.herokuapp.com/api/adv/drop/',
+          config,
+      );
+      const jsonResponse = await response.json();
+      if (jsonResponse.messages && jsonResponse.messages.length) {
+        this.setState((state) => {
+          const previousItems = [...state.items];
+          const droppedItem = jsonResponse.messages[0].slice(17);
+          const previousInventory = [...state.inventory];
+          const itemInventoryIndex = previousInventory.indexOf(droppedItem);
+          const inventoryWithoutDroppedItem = previousInventory
+              .slice(0, itemInventoryIndex)
+              .concat(previousInventory.slice(itemInventoryIndex + 1, previousInventory.length));
+          return {
+            inventory: [...inventoryWithoutDroppedItem],
+            items: [...previousItems, droppedItem],
+            messages: [...jsonResponse.messages],
+          };
+        });
+      }
+      if (jsonResponse.cooldown) {
+        this.setState(prevState => ({
+          cooldown: prevState.cooldown + jsonResponse.cooldown,
+        }));
+      }
+      if (jsonResponse.errors) {
+        this.setState(prevState => ({
+          messages: [...prevState.messages, ...jsonResponse.errors],
+        }));
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
   render() {
     const {
       mapGraph,

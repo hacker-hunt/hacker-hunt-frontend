@@ -94,6 +94,7 @@ const SidebarWrapper = styled.div`
   height: 85vh;
   width: 300px;
   padding: 1.5rem;
+  overflow: scroll;
   h1 {
     color: #34314f;
     font-family: 'Changa', sans-serif;
