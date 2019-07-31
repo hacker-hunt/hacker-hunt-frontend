@@ -45,25 +45,71 @@ class App extends Component {
         Authorization: localStorage.getItem('token'),
       },
     };
-    const response = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/init/', config);
+    const response = await fetch(
+      'https://lambda-treasure-hunt.herokuapp.com/api/adv/init/',
+      config,
+    );
     const json = await response.json();
-    this.setState({...this.state, ...json });
+    this.setState({ ...this.state, ...json });
+    this.handleCooldownCounter();
+
+    // Grab player status and display on mount
+    this.playerstatus();
+  };
+
+  // Gets player status when called after cooldown is finished
+  playerstatus = () => {
+    setTimeout(async () => {
+      const statusConfig = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      };
+      const statusResponse = await fetch(
+        'https://lambda-treasure-hunt.herokuapp.com/api/adv/status/',
+        statusConfig,
+      );
+      const statusJson = await statusResponse.json();
+      this.setState({ ...this.state, ...statusJson });
+    }, this.state.cooldown * 1000);
+    this.handleCooldownCounter();
+  };
+
+  // Displays an up to date counter of current cooldown time
+  handleCooldownCounter = () => {
+    const cooldownCounterStop = () => {
+      clearInterval(moveCountdown);
+    };
+    const cooldownCounter = () => {
+      if (this.state.cooldown > 0) {
+        this.setState(prevState => ({
+          cooldown: (prevState.cooldown -= 1),
+        }));
+      } else {
+        cooldownCounterStop();
+      }
+    };
+    const moveCountdown = setInterval(cooldownCounter, 1000);
   };
 
   handleExplore = () => {
     const { isExploring } = this.state;
     if (!isExploring) {
-      this.setState({ isExploring: true, messages: ['Initiating auto-exploration mode.'] });
+      this.setState({
+        isExploring: true,
+        messages: ['Initiating auto-exploration mode.'],
+      });
     } else {
       this.setState({
         isExploring: false,
-        messages: ['Auto-exploration mode interrupted.']
+        messages: ['Auto-exploration mode interrupted.'],
       });
     }
   };
 
   // Navigation methods
-  manualMove = async (direction) => {
+  manualMove = async direction => {
     const config = {
       method: 'POST',
       headers: {
@@ -72,11 +118,16 @@ class App extends Component {
       },
       body: JSON.stringify({
         direction,
-      })
+      }),
     };
-    const response = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/move/', config);
+    const response = await fetch(
+      'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
+      config,
+    );
     const json = await response.json();
-    this.setState({...this.state, ...json });
+    this.setState({ ...this.state, ...json });
+
+    this.handleCooldownCounter();
   };
   //
   // travelToShop = () => {
@@ -89,7 +140,7 @@ class App extends Component {
   //
   //
   // };
-  takeItem = async (name) => {
+  takeItem = async name => {
     try {
       const config = {
         method: 'POST',
@@ -99,9 +150,12 @@ class App extends Component {
         },
         body: JSON.stringify({
           name,
-        })
+        }),
       };
-      const response = await fetch('https://lambda-treasure-hunt.herokuapp.com/api/adv/take/', config);
+      const response = await fetch(
+        'https://lambda-treasure-hunt.herokuapp.com/api/adv/take/',
+        config,
+      );
       const jsonResponse = await response.json();
       if (jsonResponse.items) {
         this.setState(prevState => ({
@@ -115,7 +169,7 @@ class App extends Component {
       }
       if (jsonResponse.errors) {
         this.setState(prevState => ({
-          messages: [...prevState.messages, ...jsonResponse.errors]
+          messages: [...prevState.messages, ...jsonResponse.errors],
         }));
       }
     } catch (error) {
@@ -124,32 +178,49 @@ class App extends Component {
   };
 
   render() {
-    const { mapGraph, messages, isExploring, description, room_id, coordinates, title, items, players, gold, strength, speed, encumbrance, inventory, name, cooldown } = this.state;
+    const {
+      mapGraph,
+      messages,
+      isExploring,
+      description,
+      room_id,
+      coordinates,
+      title,
+      items,
+      players,
+      gold,
+      strength,
+      speed,
+      encumbrance,
+      inventory,
+      name,
+      cooldown,
+    } = this.state;
     return (
       <AppWrapper>
         <HeaderComponent />
         <MainComponent
-            mapGraph={mapGraph}
-            description={description}
-            roomId={room_id}
-            coordinates={coordinates}
-            title={title}
-            items={items}
-            players={players}
-            gold={gold}
-            strength={strength}
-            speed={speed}
-            encumbrance={encumbrance}
-            inventory={inventory}
-            cooldown={cooldown}
+          mapGraph={mapGraph}
+          description={description}
+          roomId={room_id}
+          coordinates={coordinates}
+          title={title}
+          items={items}
+          players={players}
+          gold={gold}
+          strength={strength}
+          speed={speed}
+          encumbrance={encumbrance}
+          inventory={inventory}
+          cooldown={cooldown}
         />
         <FooterComponent
-            messages={messages}
-            handleExplore={this.handleExplore}
-            isExploring={isExploring}
-            manualMove={this.manualMove}
-            takeItem={this.takeItem}
-            name={name}
+          messages={messages}
+          handleExplore={this.handleExplore}
+          isExploring={isExploring}
+          manualMove={this.manualMove}
+          takeItem={this.takeItem}
+          name={name}
         />
       </AppWrapper>
     );
@@ -164,5 +235,5 @@ const AppWrapper = styled.div`
   justify-content: space-between;
   height: 100vh;
   min-height: 100vh;
-  background: #34314F;
+  background: #34314f;
 `;
