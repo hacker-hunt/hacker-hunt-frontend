@@ -3,29 +3,18 @@ import styled from 'styled-components';
 
 import CardinalsComponent from './CardinalsComponent';
 
-const FooterComponent = props => {
-  const {
-    messages,
-    isExploring,
-    handleExplore,
-    manualMove,
-    takeItem,
-    name,
-    travelToShop,
-    sellItem,
-  } = props;
+const FooterComponent = (props) => {
+  const { messages, isExploring, handleExplore, manualMove, takeItem, disabledInterface, examinedName, sellItem } = props;
   return (
     <FooterWrapper>
       <CardinalsComponent manualMove={manualMove} />
       <div className="action-icons">
-        <i className="fas fa-store-alt" onClick={() => travelToShop()} />
-        <i className="fas fa-dollar-sign"  onClick={() => sellItem()}/>
-        <i className="fas fa-hand-paper" onClick={() => takeItem(name)} />
+        <i className="fas fa-store-alt" />
+        <i className="fas fa-dollar-sign" onClick={() => sellItem()}/>
+        <i className="fas fa-hand-paper" onClick={() => takeItem(examinedName)}/>
       </div>
       <div className="messages">
-        <button onClick={() => handleExplore()}>
-          {isExploring ? 'EXPLORING...' : 'EXPLORE'}
-        </button>
+        <button disabled={disabledInterface} onClick={() => handleExplore()}>{isExploring ? 'EXPLORING...' : 'EXPLORE'}</button>
         <div>
           {!messages.length ? (
             <p>Click EXPLORE to start exploring.</p>
@@ -46,6 +35,7 @@ const FooterWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 1rem 0;
+  z-index: 99;
   box-shadow: 0 1px 12px 2px #1f1d30;
   .action-icons {
     padding: 1.5rem;
