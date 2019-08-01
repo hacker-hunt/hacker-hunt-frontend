@@ -27,8 +27,13 @@ const SidebarComponent = props => {
         </h1>
         <h2>{title}</h2>
         <p>{description}</p>
-        <br></br>
-        <p>Exits: {exits}</p>
+        <br />
+        <p>
+          Exits:{' '}
+          {exits.map(exit => (
+            <span>{exit}</span>
+          ))}
+        </p>
         <h2>Items</h2>
         {!items.length ? (
           <p>There are no items in this room.</p>
@@ -53,11 +58,12 @@ const SidebarComponent = props => {
           <p>Encumbrance: {encumbrance}</p>
           <p>Strength: {strength}</p>
           <p>Speed: {speed}</p>
-          <p>Inventory: {
-            inventory.length
-            ? inventory.map(inventoryItem => <p>{inventoryItem}</p>)
-            : "Your inventory is empty"
-          }</p>
+          <p>
+            Inventory:{' '}
+            {inventory.length
+              ? inventory.map(inventoryItem => <p>{inventoryItem}</p>)
+              : 'Your inventory is empty'}
+          </p>
         </div>
       </div>
     </SidebarWrapper>
