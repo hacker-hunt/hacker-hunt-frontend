@@ -158,8 +158,6 @@ class App extends Component {
         );
         const json = await response.json();
         this.setState({ ...this.state, ...json });
-
-        this.handleCooldownCounter();
       }, this.state.cooldown * 1000);
     }
   };
@@ -223,8 +221,6 @@ class App extends Component {
         });
       }, this.state.cooldown * 1000);
     }
-    // add set timeout to getting status as gold takes a while to update on sales
-    this.playerStatus();
   };
 
   examineItem = async (name) => {
