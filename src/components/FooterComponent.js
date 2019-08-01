@@ -3,25 +3,33 @@ import styled from 'styled-components';
 
 import CardinalsComponent from './CardinalsComponent';
 
-const FooterComponent = (props) => {
-  const { messages, isExploring, handleExplore, manualMove, takeItem, name, travelToShop } = props;
+const FooterComponent = props => {
+  const {
+    messages,
+    isExploring,
+    handleExplore,
+    manualMove,
+    takeItem,
+    name,
+    travelToShop,
+  } = props;
   return (
     <FooterWrapper>
-      <CardinalsComponent manualMove={manualMove}/>
+      <CardinalsComponent manualMove={manualMove} />
       <div className="action-icons">
-        <i className="fas fa-store-alt" on/>
-        <i className="fas fa-dollar-sign" onClick={() => travelToShop()}/>
-        <i className="fas fa-hand-paper" onClick={() => takeItem(name)}/>
+        <i className="fas fa-store-alt" on />
+        <i className="fas fa-dollar-sign" onClick={() => travelToShop()} />
+        <i className="fas fa-hand-paper" onClick={() => takeItem(name)} />
       </div>
       <div className="messages">
-        <button onClick={() => handleExplore()}>{isExploring ? 'EXPLORING...' : 'EXPLORE'}</button>
+        <button onClick={() => handleExplore()}>
+          {isExploring ? 'EXPLORING...' : 'EXPLORE'}
+        </button>
         <div>
           {!messages.length ? (
             <p>Click EXPLORE to start exploring.</p>
           ) : (
-            messages.map(message => (
-                <p key={message}>{message}</p>
-            ))
+            messages.map(message => <p key={message}>{message}</p>)
           )}
         </div>
       </div>
@@ -33,17 +41,17 @@ export default FooterComponent;
 
 const FooterWrapper = styled.div`
   text-align: center;
-  background: #692DB7;
+  background: #692db7;
   display: flex;
   align-items: center;
   padding: 1rem 0;
   box-shadow: 0 1px 12px 2px #1f1d30;
   .action-icons {
-  padding: 1.5rem;
+    padding: 1.5rem;
     i {
       padding-right: 1.5rem;
       font-size: 2.4rem;
-      color: #FFFFFF;
+      color: #ffffff;
       &:hover {
         cursor: pointer;
         color: #d7d5e5;
@@ -51,13 +59,13 @@ const FooterWrapper = styled.div`
       }
     }
   }
-  
+
   .messages {
     display: flex;
     align-items: center;
     p {
       font-size: 2rem;
-      color: #FFFFFF;
+      color: #ffffff;
       padding-left: 1.5rem;
     }
     button {
@@ -65,7 +73,7 @@ const FooterWrapper = styled.div`
       padding: 0 2rem;
       border-radius: 4px;
       font-size: 2rem;
-      color: #34314F;
+      color: #34314f;
       font-weight: 700;
       font-family: 'Changa', sans-serif;
       &:hover {

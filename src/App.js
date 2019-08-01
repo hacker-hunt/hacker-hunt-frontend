@@ -170,7 +170,7 @@ class App extends Component {
 
   sellInventory = () => {
     setTimeout(
-      this.state.inventory.map(inventoryItem => {
+      this.state.inventory.forEach(inventoryItem => {
         this.sellItem(inventoryItem);
       }),
       this.state.cooldown * 1000,
