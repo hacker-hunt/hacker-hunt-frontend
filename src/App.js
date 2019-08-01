@@ -109,7 +109,7 @@ class App extends Component {
   };
 
   // Navigation methods
-  manualMove = async direction => {
+  manualMove = direction => {setTimeout(async () => {
     const config = {
       method: 'POST',
       headers: {
@@ -128,7 +128,7 @@ class App extends Component {
     this.setState({ ...this.state, ...json });
 
     this.handleCooldownCounter();
-  };
+  }, this.state.cooldown * 1000)};
   //
   // travelToShop = () => {
   //
@@ -136,7 +136,7 @@ class App extends Component {
   //
 
 
-  sellInventory = async () => {
+  sellInventory = () => {
     setTimeout(this.state.inventory.map(inventoryItem => {
       sellItem(inventoryItem)
     }), this.state.cooldown * 1000)
