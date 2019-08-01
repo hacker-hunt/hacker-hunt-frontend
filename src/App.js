@@ -170,46 +170,33 @@ class App extends Component {
   //   }, this.state.cooldown * 1000);
   // };
 
-  sellInventory = async () => {
-    await this.playerStatus();
-    setTimeout(
-      this.state.inventory.forEach(inventoryItem => {
-        const sellIt = async () => {
-          await this.playerStatus();
-          console.log(`cooldown after status check: ${this.state.cooldown}`);
-          await this.sellItem(inventoryItem);
-          console.log(`cooldown after item sale: ${this.state.cooldown}`);
+  sellItem = async () => {
+    if (this.state.inventory.length) {
+      await setTimeout(async () => {
+        const config = {
+          method: 'POST',
+          headers: {
+            Authorization: localStorage.getItem('token'),
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: this.state.inventory[0],
+            confirm: 'yes',
+          }),
         };
-        sellIt();
-      }),
-      this.state.cooldown * 1000,
-    );
-    // add set timeout to getting status as gold takes a while to update
-    setTimeout(this.playerStatus(), 5000);
-    this.handleCooldownCounter();
-  };
-
-  sellItem = item => {
-    setTimeout(async () => {
-      const config = {
-        method: 'POST',
-        headers: {
-          Authorization: localStorage.getItem('token'),
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: item,
-          confirm: 'yes',
-        }),
-      };
-      const response = await fetch(
-        'https://lambda-treasure-hunt.herokuapp.com/api/adv/sell/',
-        config,
-      );
-      console.log(`Server: ${response}`);
-      const json = await response.json();
-      this.setState({ ...this.state, ...json });
-    }, this.state.cooldown * 1000);
+        const response = await fetch(
+          'https://lambda-treasure-hunt.herokuapp.com/api/adv/sell/',
+          config,
+        );
+        const json = await response.json();
+        this.setState({
+          ...this.state,
+          ...json,
+        });
+      }, this.state.cooldown * 1000);
+    }
+    // add set timeout to getting status as gold takes a while to update on sales
+    this.playerStatus();
   };
 
   takeItem = async name => {
@@ -296,7 +283,7 @@ class App extends Component {
           takeItem={this.takeItem}
           name={name}
           travelToShop={this.travelToShop}
-          sellInventory={this.sellInventory}
+          sellItem={this.sellItem}
         />
       </AppWrapper>
     );

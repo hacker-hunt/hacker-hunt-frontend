@@ -12,14 +12,14 @@ const FooterComponent = props => {
     takeItem,
     name,
     travelToShop,
-    sellInventory,
+    sellItem,
   } = props;
   return (
     <FooterWrapper>
       <CardinalsComponent manualMove={manualMove} />
       <div className="action-icons">
         <i className="fas fa-store-alt" onClick={() => travelToShop()} />
-        <i className="fas fa-dollar-sign"  onClick={() => sellInventory()}/>
+        <i className="fas fa-dollar-sign"  onClick={() => sellItem()}/>
         <i className="fas fa-hand-paper" onClick={() => takeItem(name)} />
       </div>
       <div className="messages">
