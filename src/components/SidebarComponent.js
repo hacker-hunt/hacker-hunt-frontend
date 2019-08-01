@@ -93,6 +93,7 @@ const SidebarComponent = props => {
 const SidebarWrapper = styled.div`
   background: #d7d5e5;
   height: 85vh;
+  min-width: 300px;
   width: 300px;
   padding: 1.5rem;
   padding-bottom: 4rem;
