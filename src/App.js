@@ -134,12 +134,15 @@ class App extends Component {
   //
   // };
   //
-  // sellItems = () => {
-  //
-  // };
-  //
-  //
-  // };
+
+
+  sellInventory = async () => {
+    setTimeout(this.state.inventory.map(inventoryItem => {
+      sellItem(inventoryItem)
+    }), this.state.cooldown * 1000)
+  };
+  
+
   takeItem = async name => {
     try {
       const config = {
