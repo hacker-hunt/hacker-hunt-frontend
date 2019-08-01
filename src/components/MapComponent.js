@@ -78,7 +78,30 @@ class MapComponent extends Component {
             }}
             onValueMouseOut={() => this.setState({roomValue: null})}
           />
-          {currentRoomCoords ? <MarkSeries data={currentRoom} color="red" size={4} strokewidth={1}/> : null}
+          {
+            currentRoomCoords ?
+              <MarkSeries
+                data={currentRoom}
+                color="red"
+                size={4}
+                strokewidth={1}
+                className="mark-series"
+                onValueMouseOver={(datapoint) => {
+                  // display room number on mouseover
+                  keys.map(keyValue => {
+                    if (mapGraph[keyValue][0].x === datapoint.x &&
+                        mapGraph[keyValue][0].y === datapoint.y
+                    ) {
+                      this.setState({ roomValue: keyValue})
+                    }
+                    return keyValue;
+                  })
+                }}
+                onValueMouseOut={() => this.setState({roomValue: null})}
+              />
+            :
+              null
+            }
         </FlexibleXYPlot>
       </MapWrapper>
     );
