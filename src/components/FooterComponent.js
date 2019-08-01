@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import CardinalsComponent from './CardinalsComponent';
 
 const FooterComponent = (props) => {
-  const { messages, isExploring, handleExplore, manualMove, takeItem, name, disabledInterface, examinedName } = props;
+  const { messages, isExploring, handleExplore, manualMove, takeItem, disabledInterface, examinedName } = props;
   return (
     <FooterWrapper>
       <CardinalsComponent manualMove={manualMove}/>
