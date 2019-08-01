@@ -42,6 +42,28 @@ class App extends Component {
     this.initialRequest();
   }
 
+  countDownCooldown = async () => {
+    if (!this.state.disabledInterface) {
+      const cooldownInterval = setInterval(() => {
+        if (this.state.cooldown > 0) {
+          this.setState(prevState => ({
+            cooldown: prevState.cooldown - 1,
+            disabledInterface: true,
+          }));
+        } else {
+          clearInterval(cooldownInterval);
+          this.setState({ disabledInterface: false, cooldown: 0 });
+        }
+      }, 1000);
+    }
+  };
+
+  componentDidUpdate(prevProps) {
+    if (this.state.cooldown > 0 && !this.state.disabledInterface) {
+      this.countDownCooldown();
+    }
+  }
+
   initialRequest = async () => {
     const config = {
       method: 'GET',
@@ -55,7 +77,7 @@ class App extends Component {
     );
     const json = await response.json();
     this.setState({ ...this.state, ...json });
-    this.handleCooldownCounter();
+    this.countDownCooldown();
 
     // Grab player status and display on mount
     this.playerstatus();
@@ -77,7 +99,7 @@ class App extends Component {
       const statusJson = await statusResponse.json();
       this.setState({ ...this.state, ...statusJson });
     }, this.state.cooldown * 1000);
-    this.handleCooldownCounter();
+    this.countDownCooldown();
   };
 
   // Displays an up to date counter of current cooldown time
@@ -133,7 +155,7 @@ class App extends Component {
     const json = await response.json();
     this.setState({ ...this.state, ...json });
 
-    this.handleCooldownCounter();
+    this.countDownCooldown();
   };
 
   examineItem = async (name) => {
