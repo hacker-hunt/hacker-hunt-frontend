@@ -153,9 +153,9 @@ class App extends Component {
       this.setState(prevState => ({
         examinedName: jsonResponse.name,
         examinedDescription: jsonResponse.description,
-        examinedWeight: jsonResponse.weight
+        examinedWeight: jsonResponse.weight,
+        cooldown: Math.round(prevState.cooldown + jsonResponse.cooldown),
       }));
-      console.log(jsonResponse);
     } catch (error) {
         throw error;
     }
