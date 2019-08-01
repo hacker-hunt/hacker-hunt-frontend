@@ -152,6 +152,26 @@ class App extends Component {
     this.playerstatus();
   };
 
+  travelAnywhere = target_id => {
+    setTimeout(async () => {
+      const config = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          target_id
+        }),
+      };
+      console.log(body);
+      const response = await fetch('http://localhost:5000/traverse', config);
+      console.log(response);
+    }),
+      this.state.cooldown * 1000;
+    this.playerstatus();
+  };
+
   sellInventory = () => {
     setTimeout(
       this.state.inventory.map(inventoryItem => {
