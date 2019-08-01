@@ -161,7 +161,13 @@ class App extends Component {
     }
   };
 
-  takeItem = async name => {
+  takeItem = async (name) => {
+    if (this.state.strength - this.state.encumbrance - this.state.examinedWeight <= 0) {
+      this.setState({
+        messages: ["You are too encumbered to pick up this item."],
+      });
+      return;
+    }
     try {
       const config = {
         method: 'POST',
@@ -178,14 +184,25 @@ class App extends Component {
         config,
       );
       const jsonResponse = await response.json();
-      if (jsonResponse.items) {
-        this.setState(prevState => ({
-          inventory: [...prevState.inventory, ...jsonResponse.items],
-        }));
+      if (jsonResponse.messages && jsonResponse.messages.length && jsonResponse.errors && !jsonResponse.errors.length) {
+        this.setState(prevState => {
+          const pickedUpItem = jsonResponse.messages[0].slice(19);
+          const previousItems = [...prevState.items];
+          const itemIndex = previousItems.indexOf(pickedUpItem);
+          const itemsWithoutPickedUpItem = previousItems
+            .slice(0, itemIndex)
+            .concat(previousItems.slice(itemIndex + 1, previousItems.length));
+          return {
+            inventory: [...prevState.inventory, pickedUpItem],
+            items: [...itemsWithoutPickedUpItem],
+            messages: [...jsonResponse.messages],
+            cooldown: Math.round(prevState.cooldown + jsonResponse.cooldown),
+          }
+        });
       }
       if (jsonResponse.cooldown) {
         this.setState(prevState => ({
-          cooldown: prevState.cooldown + jsonResponse.cooldown,
+          cooldown: Math.round(prevState.cooldown + jsonResponse.cooldown),
         }));
       }
       if (jsonResponse.errors) {
@@ -233,7 +250,7 @@ class App extends Component {
       }
       if (jsonResponse.cooldown) {
         this.setState(prevState => ({
-          cooldown: prevState.cooldown + jsonResponse.cooldown,
+          cooldown: Math.round(prevState.cooldown + jsonResponse.cooldown),
         }));
       }
       if (jsonResponse.errors) {
@@ -267,6 +284,7 @@ class App extends Component {
       examinedName,
       examinedDescription,
       examinedWeight,
+      disabledInterface,
     } = this.state;
     return (
       <AppWrapper>
@@ -299,6 +317,7 @@ class App extends Component {
           manualMove={this.manualMove}
           takeItem={this.takeItem}
           name={name}
+          examinedName={examinedName}
         />
       </AppWrapper>
     );
