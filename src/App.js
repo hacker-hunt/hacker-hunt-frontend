@@ -54,11 +54,11 @@ class App extends Component {
     this.handleCooldownCounter();
 
     // Grab player status and display on mount
-    this.playerstatus();
+    this.playerStatus();
   };
 
   // Gets player status when called after cooldown is finished
-  playerstatus = () => {
+  playerStatus = () => {
     setTimeout(async () => {
       const statusConfig = {
         method: 'POST',
@@ -110,6 +110,8 @@ class App extends Component {
 
   // Navigation methods
   manualMove = direction => {
+    const next_room_id = mapGraph[this.state.room_id][1][direction];
+    console.log(next_room_id)
     setTimeout(async () => {
       const config = {
         method: 'POST',
@@ -119,6 +121,7 @@ class App extends Component {
         },
         body: JSON.stringify({
           direction,
+          next_room_id: next_room_id.toString()
         }),
       };
       const response = await fetch(
@@ -147,7 +150,6 @@ class App extends Component {
       const response = await fetch('http://localhost:5000/traverse', config);
       console.log(response);
     }, this.state.cooldown * 1000);
-    this.playerstatus();
   };
 
   travelAnywhere = target_id => {
@@ -165,16 +167,22 @@ class App extends Component {
       const response = await fetch('http://localhost:5000/traverse', config);
       console.log(response);
     }, this.state.cooldown * 1000);
-    this.playerstatus();
   };
 
-  sellInventory = () => {
+  sellInventory = async () => {
     setTimeout(
       this.state.inventory.forEach(inventoryItem => {
-        this.sellItem(inventoryItem);
+        const sellIt = async () => {
+          await this.sellItem(inventoryItem);
+          await this.playerStatus();
+        };
+        sellIt();
       }),
       this.state.cooldown * 1000,
     );
+    await this.handleCooldownCounter();
+    // add set timeout to getting status as gold takes a while to update
+    setTimeout(this.playerStatus(), 5000);
   };
 
   sellItem = item => {
@@ -186,7 +194,7 @@ class App extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          item,
+          name: item,
           confirm: 'yes',
         }),
       };
@@ -194,7 +202,9 @@ class App extends Component {
         'https://lambda-treasure-hunt.herokuapp.com/api/adv/sell/',
         config,
       );
-      console.log(response);
+      console.log(`Server: ${response}`);
+      const json = await response.json();
+      this.setState({ ...this.state, ...json });
     }, this.state.cooldown * 1000);
   };
 
@@ -282,6 +292,7 @@ class App extends Component {
           takeItem={this.takeItem}
           name={name}
           travelToShop={this.travelToShop}
+          sellInventory={this.sellInventory}
         />
       </AppWrapper>
     );
