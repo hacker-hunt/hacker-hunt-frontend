@@ -109,33 +109,7 @@ class App extends Component {
   };
 
   // Navigation methods
-  manualMove = direction => {setTimeout(async () => {
-    const config = {
-      method: 'POST',
-      headers: {
-        Authorization: localStorage.getItem('token'),
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        direction,
-      }),
-    };
-    const response = await fetch(
-      'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
-      config,
-    );
-    const json = await response.json();
-    this.setState({ ...this.state, ...json });
-
-    this.handleCooldownCounter();
-  }, this.state.cooldown * 1000)};
-  //
-  // travelToShop = () => {
-  //
-  // };
-  //
-
-  sellItem = item => {
+  manualMove = direction => {
     setTimeout(async () => {
       const config = {
         method: 'POST',
@@ -144,25 +118,71 @@ class App extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          item,
-          confirm: 'yes'
+          direction,
         }),
       };
+      const response = await fetch(
+        'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
+        config,
+      );
+      const json = await response.json();
+      this.setState({ ...this.state, ...json });
+
+      this.handleCooldownCounter();
+    }, this.state.cooldown * 1000);
+  };
+
+  travelToShop = () => {
+    setTimeout(async () => {
+      const config = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          target_id: 1,
+        }),
+      };
+      console.log(body);
+      const response = await fetch('http://localhost:5000/traverse', config);
+      console.log(response);
+    }),
+      this.state.cooldown * 1000;
+    this.playerstatus();
+  };
+
+  sellInventory = () => {
+    setTimeout(
+      this.state.inventory.map(inventoryItem => {
+        this.sellItem(inventoryItem);
+      }),
+      this.state.cooldown * 1000,
+    );
+  };
+
+  sellItem = item => {
+    setTimeout(async () => {
+      const config = {
+        method: 'POST',
+        headers: {  
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          item,
+          confirm: 'yes',
+        }),
+      };
+      console.log(body);
       const response = await fetch(
         'https://lambda-treasure-hunt.herokuapp.com/api/adv/sell/',
         config,
       );
-      console.log(response)
-    })
-  }
-
-
-  sellInventory = () => {
-    setTimeout(this.state.inventory.map(inventoryItem => {
-      sellItem(inventoryItem)
-    }), this.state.cooldown * 1000)
+      console.log(response);
+    }),
+      this.state.cooldown * 1000;
   };
-  
 
   takeItem = async name => {
     try {
