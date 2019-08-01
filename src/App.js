@@ -80,11 +80,11 @@ class App extends Component {
     this.countDownCooldown();
 
     // Grab player status and display on mount
-    this.playerstatus();
+    this.playerStatus();
   };
 
   // Gets player status when called after cooldown is finished
-  playerstatus = () => {
+  playerStatus = () => {
     setTimeout(async () => {
       const statusConfig = {
         method: 'POST',
@@ -137,25 +137,90 @@ class App extends Component {
   };
 
   // Navigation methods
-  manualMove = async direction => {
-    const config = {
-      method: 'POST',
-      headers: {
-        Authorization: localStorage.getItem('token'),
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        direction,
-      }),
-    };
-    const response = await fetch(
-      'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
-      config,
-    );
-    const json = await response.json();
-    this.setState({ ...this.state, ...json });
+  manualMove = direction => {
+    const next_room_id = mapGraph[this.state.room_id][1][direction];
+    if (next_room_id || next_room_id === 0) {
+      setTimeout(async () => {
+        const config = {
+          method: 'POST',
+          headers: {
+            Authorization: localStorage.getItem('token'),
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            direction,
+            next_room_id: next_room_id.toString(),
+          }),
+        };
+        const response = await fetch(
+          'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
+          config,
+        );
+        const json = await response.json();
+        this.setState({ ...this.state, ...json });
+      }, this.state.cooldown * 1000);
+    }
+  };
 
-    this.countDownCooldown();
+  // travelToShop = () => {
+  //   setTimeout(async () => {
+  //     const config = {
+  //       method: 'POST',
+  //       headers: {
+  //         Authorization: localStorage.getItem('token'),
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         target_id: 1,
+  //       }),
+  //     };
+  //     const response = await fetch('http://localhost:5000/traverse', config);
+  //     console.log(response);
+  //   }, this.state.cooldown * 1000);
+  // };
+
+  // travelAnywhere = target_id => {
+  //   setTimeout(async () => {
+  //     const config = {
+  //       method: 'POST',
+  //       headers: {
+  //         Authorization: localStorage.getItem('token'),
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         target_id,
+  //       }),
+  //     };
+  //     const response = await fetch('http://localhost:5000/traverse', config);
+  //     console.log(response);
+  //   }, this.state.cooldown * 1000);
+  // };
+
+  sellItem = async () => {
+    if (this.state.inventory.length) {
+      await setTimeout(async () => {
+        const config = {
+          method: 'POST',
+          headers: {
+            Authorization: localStorage.getItem('token'),
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: this.state.inventory[0],
+            confirm: 'yes',
+          }),
+        };
+        const response = await fetch(
+          'https://lambda-treasure-hunt.herokuapp.com/api/adv/sell/',
+          config,
+        );
+        const json = await response.json();
+        this.setState({
+          ...this.state,
+          ...json,
+        });
+      }, this.state.cooldown * 1000);
+    }
   };
 
   examineItem = async (name) => {
@@ -294,6 +359,7 @@ class App extends Component {
       messages,
       isExploring,
       description,
+      exits,
       room_id,
       coordinates,
       title,
@@ -318,6 +384,7 @@ class App extends Component {
           disabledInterface={disabledInterface}
           mapGraph={mapGraph}
           description={description}
+          exits={exits}
           roomId={room_id}
           coordinates={coordinates}
           title={title}
@@ -344,6 +411,8 @@ class App extends Component {
           manualMove={this.manualMove}
           takeItem={this.takeItem}
           name={name}
+          travelToShop={this.travelToShop}
+          sellItem={this.sellItem}
           examinedName={examinedName}
         />
       </AppWrapper>

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const SidebarComponent = props => {
   const {
     description,
+    exits,
     roomId,
     coordinates,
     title,
@@ -33,7 +34,13 @@ const SidebarComponent = props => {
         </h1>
         <h2>{title}</h2>
         <p>{description}</p>
-
+        <br />
+        <p>
+          Exits:{' '}
+          {exits.map(exit => (
+            <span>{exit}</span>
+          ))}
+        </p>
         <div className="list-details">
           {!examinedName ? (
               <p>Click an item or a player to examine.</p>
