@@ -144,11 +144,9 @@ class App extends Component {
           target_id: 1,
         }),
       };
-      console.log(body);
       const response = await fetch('http://localhost:5000/traverse', config);
       console.log(response);
-    }),
-      this.state.cooldown * 1000;
+    }, this.state.cooldown * 1000);
     this.playerstatus();
   };
 
@@ -161,14 +159,12 @@ class App extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          target_id
+          target_id,
         }),
       };
-      console.log(body);
       const response = await fetch('http://localhost:5000/traverse', config);
       console.log(response);
-    }),
-      this.state.cooldown * 1000;
+    }, this.state.cooldown * 1000);
     this.playerstatus();
   };
 
@@ -185,7 +181,7 @@ class App extends Component {
     setTimeout(async () => {
       const config = {
         method: 'POST',
-        headers: {  
+        headers: {
           Authorization: localStorage.getItem('token'),
           'Content-Type': 'application/json',
         },
@@ -194,14 +190,12 @@ class App extends Component {
           confirm: 'yes',
         }),
       };
-      console.log(body);
       const response = await fetch(
         'https://lambda-treasure-hunt.herokuapp.com/api/adv/sell/',
         config,
       );
       console.log(response);
-    }),
-      this.state.cooldown * 1000;
+    }, this.state.cooldown * 1000);
   };
 
   takeItem = async name => {
@@ -285,6 +279,7 @@ class App extends Component {
           manualMove={this.manualMove}
           takeItem={this.takeItem}
           name={name}
+          travelToShop={this.travelToShop}
         />
       </AppWrapper>
     );

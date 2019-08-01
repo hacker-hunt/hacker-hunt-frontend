@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import CardinalsComponent from './CardinalsComponent';
 
 const FooterComponent = (props) => {
-  const { messages, isExploring, handleExplore, manualMove, takeItem, name } = props;
+  const { messages, isExploring, handleExplore, manualMove, takeItem, name, travelToShop } = props;
   return (
     <FooterWrapper>
       <CardinalsComponent manualMove={manualMove}/>
       <div className="action-icons">
-        <i className="fas fa-store-alt" />
-        <i className="fas fa-dollar-sign" />
+        <i className="fas fa-store-alt" on/>
+        <i className="fas fa-dollar-sign" onClick={() => travelToShop()}/>
         <i className="fas fa-hand-paper" onClick={() => takeItem(name)}/>
       </div>
       <div className="messages">
