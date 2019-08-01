@@ -33,10 +33,12 @@ class MapComponent extends Component {
   };
   render() {
     const { roomValue } = this.state;
-    const {mapGraph } = this.props;
+    const {mapGraph, roomId } = this.props;
     const values = Object.values(mapGraph);
     const keys = Object.keys(mapGraph);
     const coordinates = values.map(coordinate => coordinate[0]);
+    const currentRoomCoords = roomId ? coordinates[roomId] : null;
+    const currentRoom = [currentRoomCoords];
     const exits = values.map(exit => exit[1]);
 
     const lineDisplay = values.map((value, index) => {
@@ -76,6 +78,7 @@ class MapComponent extends Component {
             }}
             onValueMouseOut={() => this.setState({roomValue: null})}
           />
+          {currentRoomCoords ? <MarkSeries data={currentRoom} color="red" size={4} strokewidth={1}/> : null}
         </FlexibleXYPlot>
       </MapWrapper>
     );
