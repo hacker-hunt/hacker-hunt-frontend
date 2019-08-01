@@ -10,6 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      disabledInterface: false,
       mapGraph: mapGraph,
       room_id: null,
       title: '',
@@ -31,11 +32,36 @@ class App extends Component {
       speed: null,
       status: [],
       isExploring: false,
+      examinedName: '',
+      examinedDescription: '',
+      examinedWeight: 0,
     };
   }
 
   componentDidMount() {
     this.initialRequest();
+  }
+
+  countDownCooldown = async () => {
+    if (!this.state.disabledInterface) {
+      const cooldownInterval = setInterval(() => {
+        if (this.state.cooldown > 0) {
+          this.setState(prevState => ({
+            cooldown: prevState.cooldown - 1,
+            disabledInterface: true,
+          }));
+        } else {
+          clearInterval(cooldownInterval);
+          this.setState({ disabledInterface: false, cooldown: 0 });
+        }
+      }, 1000);
+    }
+  };
+
+  componentDidUpdate(prevProps) {
+    if (this.state.cooldown > 0 && !this.state.disabledInterface) {
+      this.countDownCooldown();
+    }
   }
 
   initialRequest = async () => {
@@ -51,7 +77,7 @@ class App extends Component {
     );
     const json = await response.json();
     this.setState({ ...this.state, ...json });
-    this.handleCooldownCounter();
+    this.countDownCooldown();
 
     // Grab player status and display on mount
     this.playerstatus();
@@ -73,7 +99,7 @@ class App extends Component {
       const statusJson = await statusResponse.json();
       this.setState({ ...this.state, ...statusJson });
     }, this.state.cooldown * 1000);
-    this.handleCooldownCounter();
+    this.countDownCooldown();
   };
 
   // Displays an up to date counter of current cooldown time
@@ -85,9 +111,11 @@ class App extends Component {
       if (this.state.cooldown > 0) {
         this.setState(prevState => ({
           cooldown: (prevState.cooldown -= 1),
+          disabledInterface: true,
         }));
       } else {
         cooldownCounterStop();
+        this.setState({ disabledInterface: false });
       }
     };
     const moveCountdown = setInterval(cooldownCounter, 1000);
@@ -127,20 +155,44 @@ class App extends Component {
     const json = await response.json();
     this.setState({ ...this.state, ...json });
 
-    this.handleCooldownCounter();
+    this.countDownCooldown();
   };
-  //
-  // travelToShop = () => {
-  //
-  // };
-  //
-  // sellItems = () => {
-  //
-  // };
-  //
-  //
-  // };
-  takeItem = async name => {
+
+  examineItem = async (name) => {
+    try {
+      const config = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+        }),
+      };
+      const response = await fetch(
+          'https://lambda-treasure-hunt.herokuapp.com/api/adv/examine/',
+          config,
+      );
+      const jsonResponse = await response.json();
+      this.setState(prevState => ({
+        examinedName: jsonResponse.name,
+        examinedDescription: jsonResponse.description,
+        examinedWeight: jsonResponse.weight,
+        cooldown: Math.round(prevState.cooldown + jsonResponse.cooldown),
+      }));
+    } catch (error) {
+        throw error;
+    }
+  };
+
+  takeItem = async (name) => {
+    if (this.state.strength - this.state.encumbrance - this.state.examinedWeight <= 0) {
+      this.setState({
+        messages: ["You are too encumbered to pick up this item."],
+      });
+      return;
+    }
     try {
       const config = {
         method: 'POST',
@@ -157,14 +209,73 @@ class App extends Component {
         config,
       );
       const jsonResponse = await response.json();
-      if (jsonResponse.items) {
-        this.setState(prevState => ({
-          inventory: [...prevState.inventory, ...jsonResponse.items],
-        }));
+      if (jsonResponse.messages && jsonResponse.messages.length && jsonResponse.errors && !jsonResponse.errors.length) {
+        this.setState(prevState => {
+          const pickedUpItem = jsonResponse.messages[0].slice(19);
+          const previousItems = [...prevState.items];
+          const itemIndex = previousItems.indexOf(pickedUpItem);
+          const itemsWithoutPickedUpItem = previousItems
+            .slice(0, itemIndex)
+            .concat(previousItems.slice(itemIndex + 1, previousItems.length));
+          return {
+            inventory: [...prevState.inventory, pickedUpItem],
+            items: [...itemsWithoutPickedUpItem],
+            messages: [...jsonResponse.messages],
+            cooldown: Math.round(prevState.cooldown + jsonResponse.cooldown),
+          }
+        });
       }
       if (jsonResponse.cooldown) {
         this.setState(prevState => ({
-          cooldown: prevState.cooldown + jsonResponse.cooldown,
+          cooldown: Math.round(prevState.cooldown + jsonResponse.cooldown),
+        }));
+      }
+      if (jsonResponse.errors) {
+        this.setState(prevState => ({
+          messages: [...prevState.messages, ...jsonResponse.errors],
+        }));
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  dropItem = async (name) => {
+    try {
+      const config = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+        }),
+      };
+      const response = await fetch(
+          'https://lambda-treasure-hunt.herokuapp.com/api/adv/drop/',
+          config,
+      );
+      const jsonResponse = await response.json();
+      if (jsonResponse.messages && jsonResponse.messages.length) {
+        this.setState((state) => {
+          const previousItems = [...state.items];
+          const droppedItem = jsonResponse.messages[0].slice(17);
+          const previousInventory = [...state.inventory];
+          const itemInventoryIndex = previousInventory.indexOf(droppedItem);
+          const inventoryWithoutDroppedItem = previousInventory
+              .slice(0, itemInventoryIndex)
+              .concat(previousInventory.slice(itemInventoryIndex + 1, previousInventory.length));
+          return {
+            inventory: [...inventoryWithoutDroppedItem],
+            items: [...previousItems, droppedItem],
+            messages: [...jsonResponse.messages],
+          };
+        });
+      }
+      if (jsonResponse.cooldown) {
+        this.setState(prevState => ({
+          cooldown: Math.round(prevState.cooldown + jsonResponse.cooldown),
         }));
       }
       if (jsonResponse.errors) {
@@ -195,11 +306,16 @@ class App extends Component {
       inventory,
       name,
       cooldown,
+      examinedName,
+      examinedDescription,
+      examinedWeight,
+      disabledInterface,
     } = this.state;
     return (
       <AppWrapper>
         <HeaderComponent />
         <MainComponent
+          disabledInterface={disabledInterface}
           mapGraph={mapGraph}
           description={description}
           roomId={room_id}
@@ -213,14 +329,22 @@ class App extends Component {
           encumbrance={encumbrance}
           inventory={inventory}
           cooldown={cooldown}
+          examineItem={this.examineItem}
+          name={name}
+          examinedName={examinedName}
+          examinedDescription={examinedDescription}
+          examinedWeight={examinedWeight}
+          dropItem={this.dropItem}
         />
         <FooterComponent
+          disabledInterface={disabledInterface}
           messages={messages}
           handleExplore={this.handleExplore}
           isExploring={isExploring}
           manualMove={this.manualMove}
           takeItem={this.takeItem}
           name={name}
+          examinedName={examinedName}
         />
       </AppWrapper>
     );

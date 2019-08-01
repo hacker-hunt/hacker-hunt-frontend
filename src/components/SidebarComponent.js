@@ -15,6 +15,13 @@ const SidebarComponent = props => {
     speed,
     inventory,
     cooldown,
+    name,
+    examinedName,
+    examinedDescription,
+    examinedWeight,
+    examineItem,
+    dropItem,
+    disabledInterface,
   } = props;
   return (
     <SidebarWrapper>
@@ -26,35 +33,57 @@ const SidebarComponent = props => {
         </h1>
         <h2>{title}</h2>
         <p>{description}</p>
+
+        <div className="list-details">
+          {!examinedName ? (
+              <p>Click an item or a player to examine.</p>
+          ): (
+              <div className="details">
+                <p>Name: {examinedName}</p>
+                <p>Description: {examinedDescription}</p>
+                <p>Weight: {examinedWeight}</p>
+              </div>
+          )}
+        </div>
+
         <h2>Items</h2>
-        {!items.length ? (
-          <p>There are no items in this room.</p>
-        ) : (
-          items.map(item => <p>{item}</p>)
-        )}
+
+        <div className="items-list">
+          {!items.length || disabledInterface ? (
+              <p>There are no items in this room or you're on a cooldown.</p>
+          ) : (
+              items.map(item => <button disabled={disabledInterface} className="items-players" onClick={() => examineItem(item)}>{item}</button>)
+          )}
+        </div>
       </div>
 
       <div className="player-info">
         <h2>Players</h2>
-        {!players.length ? (
-          <p>There are no players in this room.</p>
-        ) : (
-          players.map(player => <p>{player}</p>)
-        )}
+        <div className="players-list">
+          {!players.length || disabledInterface ? (
+              <p>There are no players in this room or you're on a cooldown.</p>
+          ) : (
+              players.map(player => <button disabled={disabledInterface} className="items-players" onClick={() => examineItem(player)}>{player}</button>)
+          )}
+        </div>
+
         <div className="fortune">
-          <h2>Gold</h2>
+          <h2>{name}</h2>
           <span> $ {gold}</span>
         </div>
 
-        <div className="powers">
+        <div className="abilities">
           <p>Encumbrance: {encumbrance}</p>
           <p>Strength: {strength}</p>
           <p>Speed: {speed}</p>
-          <p>Inventory: {
-            inventory.length
-            ? inventory.map(inventoryItem => <p>{inventoryItem}</p>)
-            : "Your inventory is empty"
-          }</p>
+          <p>Inventory:</p>
+          <div className="inventory">
+            {
+            inventory.length || !disabledInterface
+            ? inventory.map(inventoryItem => <button disabled={disabledInterface} className="items-players" onClick={() => dropItem(inventoryItem)}>{inventoryItem}</button>)
+            : "Your inventory is empty or you're on a cooldown."
+          }
+          </div>
         </div>
       </div>
     </SidebarWrapper>
@@ -66,6 +95,8 @@ const SidebarWrapper = styled.div`
   height: 85vh;
   width: 300px;
   padding: 1.5rem;
+  padding-bottom: 4rem;
+  overflow: scroll;
   h1 {
     color: #34314f;
     font-family: 'Changa', sans-serif;
@@ -86,6 +117,37 @@ const SidebarWrapper = styled.div`
     padding: 1rem 0;
     color: #34314f;
   }
+  .items-list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .list-details {
+    height: 80px;
+    padding: 1rem;
+    background: #34314f;
+    p {
+      color: #FFFFFF;
+      font-size: 1.4rem;
+      font-weight: 200;
+    }
+    .details {
+      color: white;
+      font-size: 1.4rem;
+    }
+  }
+  
+  .items-players {
+    padding: 0.3rem;
+    border-radius: 3px;
+    margin: 0.2rem 0;
+    font-size: 1.4rem;
+    background: #FFFFFF;
+    color: #34314f;
+    &:hover {
+    cursor: pointer;
+  }
+  }
   .fortune {
     display: flex;
     justify-content: space-between;
@@ -94,6 +156,10 @@ const SidebarWrapper = styled.div`
       font-size: 1.6rem;
       color: #34314f;
     }
+  }
+  .inventory {
+    display: flex;
+    flex-direction: column;
   }
 `;
 
