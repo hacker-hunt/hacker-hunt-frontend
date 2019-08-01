@@ -135,6 +135,27 @@ class App extends Component {
   // };
   //
 
+  sellItem = item => {
+    setTimeout(async () => {
+      const config = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          item,
+          confirm: 'yes'
+        }),
+      };
+      const response = await fetch(
+        'https://lambda-treasure-hunt.herokuapp.com/api/adv/sell/',
+        config,
+      );
+      console.log(response)
+    })
+  }
+
 
   sellInventory = () => {
     setTimeout(this.state.inventory.map(inventoryItem => {
