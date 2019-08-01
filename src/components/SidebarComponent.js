@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const SidebarComponent = props => {
   const {
     description,
+    exits,
     roomId,
     coordinates,
     title,
@@ -26,6 +27,8 @@ const SidebarComponent = props => {
         </h1>
         <h2>{title}</h2>
         <p>{description}</p>
+        <br></br>
+        <p>Exits: {exits}</p>
         <h2>Items</h2>
         {!items.length ? (
           <p>There are no items in this room.</p>

@@ -241,6 +241,7 @@ class App extends Component {
       messages,
       isExploring,
       description,
+      exits,
       room_id,
       coordinates,
       title,
@@ -260,6 +261,7 @@ class App extends Component {
         <MainComponent
           mapGraph={mapGraph}
           description={description}
+          exits={exits}
           roomId={room_id}
           coordinates={coordinates}
           title={title}
