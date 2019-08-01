@@ -111,78 +111,82 @@ class App extends Component {
   // Navigation methods
   manualMove = direction => {
     const next_room_id = mapGraph[this.state.room_id][1][direction];
-    console.log(next_room_id)
-    setTimeout(async () => {
-      const config = {
-        method: 'POST',
-        headers: {
-          Authorization: localStorage.getItem('token'),
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          direction,
-          next_room_id: next_room_id.toString()
-        }),
-      };
-      const response = await fetch(
-        'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
-        config,
-      );
-      const json = await response.json();
-      this.setState({ ...this.state, ...json });
+    if (next_room_id || next_room_id === 0) {
+      setTimeout(async () => {
+        const config = {
+          method: 'POST',
+          headers: {
+            Authorization: localStorage.getItem('token'),
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            direction,
+            next_room_id: next_room_id.toString(),
+          }),
+        };
+        const response = await fetch(
+          'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
+          config,
+        );
+        const json = await response.json();
+        this.setState({ ...this.state, ...json });
 
-      this.handleCooldownCounter();
-    }, this.state.cooldown * 1000);
+        this.handleCooldownCounter();
+      }, this.state.cooldown * 1000);
+    }
   };
 
-  travelToShop = () => {
-    setTimeout(async () => {
-      const config = {
-        method: 'POST',
-        headers: {
-          Authorization: localStorage.getItem('token'),
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          target_id: 1,
-        }),
-      };
-      const response = await fetch('http://localhost:5000/traverse', config);
-      console.log(response);
-    }, this.state.cooldown * 1000);
-  };
+  // travelToShop = () => {
+  //   setTimeout(async () => {
+  //     const config = {
+  //       method: 'POST',
+  //       headers: {
+  //         Authorization: localStorage.getItem('token'),
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         target_id: 1,
+  //       }),
+  //     };
+  //     const response = await fetch('http://localhost:5000/traverse', config);
+  //     console.log(response);
+  //   }, this.state.cooldown * 1000);
+  // };
 
-  travelAnywhere = target_id => {
-    setTimeout(async () => {
-      const config = {
-        method: 'POST',
-        headers: {
-          Authorization: localStorage.getItem('token'),
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          target_id,
-        }),
-      };
-      const response = await fetch('http://localhost:5000/traverse', config);
-      console.log(response);
-    }, this.state.cooldown * 1000);
-  };
+  // travelAnywhere = target_id => {
+  //   setTimeout(async () => {
+  //     const config = {
+  //       method: 'POST',
+  //       headers: {
+  //         Authorization: localStorage.getItem('token'),
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         target_id,
+  //       }),
+  //     };
+  //     const response = await fetch('http://localhost:5000/traverse', config);
+  //     console.log(response);
+  //   }, this.state.cooldown * 1000);
+  // };
 
   sellInventory = async () => {
+    await this.playerStatus();
     setTimeout(
       this.state.inventory.forEach(inventoryItem => {
         const sellIt = async () => {
-          await this.sellItem(inventoryItem);
           await this.playerStatus();
+          console.log(`cooldown after status check: ${this.state.cooldown}`);
+          await this.sellItem(inventoryItem);
+          console.log(`cooldown after item sale: ${this.state.cooldown}`);
         };
         sellIt();
       }),
       this.state.cooldown * 1000,
     );
-    await this.handleCooldownCounter();
     // add set timeout to getting status as gold takes a while to update
     setTimeout(this.playerStatus(), 5000);
+    this.handleCooldownCounter();
   };
 
   sellItem = item => {
