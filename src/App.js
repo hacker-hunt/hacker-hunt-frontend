@@ -10,6 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      disabledInterface: false,
       mapGraph: mapGraph,
       room_id: null,
       title: '',
@@ -88,9 +89,11 @@ class App extends Component {
       if (this.state.cooldown > 0) {
         this.setState(prevState => ({
           cooldown: (prevState.cooldown -= 1),
+          disabledInterface: true,
         }));
       } else {
         cooldownCounterStop();
+        this.setState({ disabledInterface: false });
       }
     };
     const moveCountdown = setInterval(cooldownCounter, 1000);
@@ -290,6 +293,7 @@ class App extends Component {
       <AppWrapper>
         <HeaderComponent />
         <MainComponent
+          disabledInterface={disabledInterface}
           mapGraph={mapGraph}
           description={description}
           roomId={room_id}
@@ -311,6 +315,7 @@ class App extends Component {
           dropItem={this.dropItem}
         />
         <FooterComponent
+          disabledInterface={disabledInterface}
           messages={messages}
           handleExplore={this.handleExplore}
           isExploring={isExploring}

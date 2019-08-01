@@ -21,6 +21,7 @@ const SidebarComponent = props => {
     examinedWeight,
     examineItem,
     dropItem,
+    disabledInterface,
   } = props;
   return (
     <SidebarWrapper>
@@ -48,10 +49,10 @@ const SidebarComponent = props => {
         <h2>Items</h2>
 
         <div className="items-list">
-          {!items.length ? (
-              <p>There are no items in this room.</p>
+          {!items.length || disabledInterface ? (
+              <p>There are no items in this room or you're on a cooldown.</p>
           ) : (
-              items.map(item => <button className="items-players" onClick={() => examineItem(item)}>{item}</button>)
+              items.map(item => <button disabled={disabledInterface} className="items-players" onClick={() => examineItem(item)}>{item}</button>)
           )}
         </div>
       </div>
@@ -59,10 +60,10 @@ const SidebarComponent = props => {
       <div className="player-info">
         <h2>Players</h2>
         <div className="players-list">
-          {!players.length ? (
-              <p>There are no players in this room.</p>
+          {!players.length || disabledInterface ? (
+              <p>There are no players in this room or you're on a cooldown.</p>
           ) : (
-              players.map(player => <button className="items-players" onClick={() => examineItem(player)}>{player}</button>)
+              players.map(player => <button disabled={disabledInterface} className="items-players" onClick={() => examineItem(player)}>{player}</button>)
           )}
         </div>
 
@@ -78,9 +79,9 @@ const SidebarComponent = props => {
           <p>Inventory:</p>
           <div className="inventory">
             {
-            inventory.length
-            ? inventory.map(inventoryItem => <button className="items-players" onClick={() => dropItem(inventoryItem)}>{inventoryItem}</button>)
-            : "Your inventory is empty"
+            inventory.length || !disabledInterface
+            ? inventory.map(inventoryItem => <button disabled={disabledInterface} className="items-players" onClick={() => dropItem(inventoryItem)}>{inventoryItem}</button>)
+            : "Your inventory is empty or you're on a cooldown."
           }
           </div>
         </div>
