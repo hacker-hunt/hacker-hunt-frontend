@@ -379,7 +379,7 @@ class App extends Component {
     } = this.state;
     return (
       <AppWrapper>
-        <HeaderComponent />
+        <HeaderComponent cooldown={cooldown}/>
         <MainComponent
           disabledInterface={disabledInterface}
           mapGraph={mapGraph}

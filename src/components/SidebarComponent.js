@@ -15,7 +15,6 @@ const SidebarComponent = props => {
     strength,
     speed,
     inventory,
-    cooldown,
     name,
     examinedName,
     examinedDescription,
@@ -27,20 +26,18 @@ const SidebarComponent = props => {
   return (
     <SidebarWrapper>
       <div className="room-info">
-        <p>Cooldown: {cooldown}</p>
-        <h1>
-          Room {roomId}
+        <h1>Room {roomId}
           <span> {coordinates}</span>
         </h1>
         <h2>{title}</h2>
         <p>{description}</p>
         <br />
-        <p>
-          Exits:{' '}
+        <div className="exits">
+          <p>Exits:{' '}</p>
           {exits.map(exit => (
-            <span>{exit}</span>
+            <span>{exit.toUpperCase()}</span>
           ))}
-        </p>
+        </div>
         <div className="list-details">
           {!examinedName ? (
               <p>Click an item or a player to examine.</p>
@@ -75,16 +72,29 @@ const SidebarComponent = props => {
         </div>
 
         <div className="fortune">
-          <h2>{name}</h2>
+          <h2>{name.toUpperCase()}</h2>
           <span> $ {gold}</span>
         </div>
 
         <div className="abilities">
-          <p>Encumbrance: {encumbrance}</p>
-          <p>Strength: {strength}</p>
-          <p>Speed: {speed}</p>
-          <p>Inventory:</p>
+          <div className="ability">
+            <p>Encumbrance:</p>
+            <span>{encumbrance}</span>
+          </div>
+
+          <div className="ability">
+            <p>Strength:</p>
+            <span>{strength}</span>
+          </div>
+
+          <div className="ability">
+            <p>Speed:</p>
+            <span>{speed}</span>
+          </div>
+
+
           <div className="inventory">
+            <p>Inventory:</p>
             {
             inventory.length || !disabledInterface
             ? inventory.map(inventoryItem => <button disabled={disabledInterface} className="items-players" onClick={() => dropItem(inventoryItem)}>{inventoryItem}</button>)
@@ -110,6 +120,7 @@ const SidebarWrapper = styled.div`
     font-family: 'Changa', sans-serif;
     font-size: 2.4rem;
     font-weight: 700;
+    padding-top: 0;
   }
   p {
     font-size: 1.6rem;
@@ -125,7 +136,26 @@ const SidebarWrapper = styled.div`
     padding: 1rem 0;
     color: #34314f;
   }
+  .exits {
+    display: flex;
+    align-items: baseline;
+    padding: 10px 0;
+    p {
+      font-weight: 700;
+      font-size: 2rem;
+    }
+    span {
+    padding: 0 5px 0 8px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    
+    }
+  }
   .items-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .players-list {
     display: flex;
     flex-direction: column;
   }
@@ -134,6 +164,7 @@ const SidebarWrapper = styled.div`
     height: 80px;
     padding: 1rem;
     background: #34314f;
+    border-radius: 3px;
     p {
       color: #FFFFFF;
       font-size: 1.4rem;
@@ -162,12 +193,32 @@ const SidebarWrapper = styled.div`
     align-items: center;
     span {
       font-size: 1.6rem;
-      color: #34314f;
+      color: #692db7;
+      font-weight: 700;
     }
   }
+  .abilities {
+    .ability {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: baseline;
+      span {
+        font-size: 1.6rem;
+        font-weight: bold;
+      }
+    }
+  }
+  
   .inventory {
     display: flex;
     flex-direction: column;
+    padding: 1rem 0;
+    p {
+    font-size: 1.6rem;
+    font-weight: 700;
+    padding-bottom: 0.5rem;
+    }
   }
 `;
 
