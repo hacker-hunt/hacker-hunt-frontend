@@ -219,7 +219,6 @@ class App extends Component {
           ...this.state,
           ...json,
         });
-        console.log(this.state.cooldown)
         this.playerStatus();
       }, this.state.cooldown * 1000);
     }
