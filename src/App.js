@@ -162,39 +162,22 @@ class App extends Component {
     }
   };
 
-  // travelToShop = () => {
-  //   setTimeout(async () => {
-  //     const config = {
-  //       method: 'POST',
-  //       headers: {
-  //         Authorization: localStorage.getItem('token'),
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         target_id: 1,
-  //       }),
-  //     };
-  //     const response = await fetch('http://localhost:5000/traverse', config);
-  //     console.log(response);
-  //   }, this.state.cooldown * 1000);
-  // };
-
-  // travelAnywhere = target_id => {
-  //   setTimeout(async () => {
-  //     const config = {
-  //       method: 'POST',
-  //       headers: {
-  //         Authorization: localStorage.getItem('token'),
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         target_id,
-  //       }),
-  //     };
-  //     const response = await fetch('http://localhost:5000/traverse', config);
-  //     console.log(response);
-  //   }, this.state.cooldown * 1000);
-  // };
+  travelToShop = () => {
+    setTimeout(async () => {
+      const config = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          target_id: 1,
+        }),
+      };
+      await fetch('http://localhost:5000/traverse', config);
+      this.initialRequest();
+    }, this.state.cooldown * 1000);
+  };
 
   sellItem = () => {
     if (this.state.inventory.length) {

@@ -3,18 +3,33 @@ import styled from 'styled-components';
 
 import CardinalsComponent from './CardinalsComponent';
 
-const FooterComponent = (props) => {
-  const { messages, isExploring, handleExplore, manualMove, takeItem, disabledInterface, examinedName, sellItem } = props;
+const FooterComponent = props => {
+  const {
+    messages,
+    isExploring,
+    handleExplore,
+    manualMove,
+    takeItem,
+    disabledInterface,
+    examinedName,
+    sellItem,
+    travelToShop,
+  } = props;
   return (
     <FooterWrapper>
       <CardinalsComponent manualMove={manualMove} />
       <div className="action-icons">
-        <i className="fas fa-store-alt" />
-        <i className="fas fa-dollar-sign" onClick={() => sellItem()}/>
-        <i className="fas fa-hand-paper" onClick={() => takeItem(examinedName)}/>
+        <i className="fas fa-store-alt" onClick={() => travelToShop()} />
+        <i className="fas fa-dollar-sign" onClick={() => sellItem()} />
+        <i
+          className="fas fa-hand-paper"
+          onClick={() => takeItem(examinedName)}
+        />
       </div>
       <div className="messages">
-        <button disabled={disabledInterface} onClick={() => handleExplore()}>{isExploring ? 'EXPLORING...' : 'EXPLORE'}</button>
+        <button disabled={disabledInterface} onClick={() => handleExplore()}>
+          {isExploring ? 'EXPLORING...' : 'EXPLORE'}
+        </button>
         <div>
           {!messages.length ? (
             <p>Click EXPLORE to start exploring.</p>
