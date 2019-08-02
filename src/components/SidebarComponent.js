@@ -35,7 +35,7 @@ const SidebarComponent = props => {
         <div className="exits">
           <p>Exits:{' '}</p>
           {exits.map(exit => (
-            <span>{exit.toUpperCase()}</span>
+            <span key={`${roomId}-${Math.random()* title.length}`}>{exit.toUpperCase()}</span>
           ))}
         </div>
         <div className="list-details">
@@ -56,7 +56,7 @@ const SidebarComponent = props => {
           {!items.length || disabledInterface ? (
               <p>There are no items in this room or you're on a cooldown.</p>
           ) : (
-              items.map(item => <button disabled={disabledInterface} className="items-players" onClick={() => examineItem(item)}>{item}</button>)
+              items.map(item => <button disabled={disabledInterface} className="items-players" onClick={() => examineItem(item)} key={`${Math.random()* description.length}`}>{item}</button>)
           )}
         </div>
       </div>
@@ -67,7 +67,7 @@ const SidebarComponent = props => {
           {!players.length || disabledInterface ? (
               <p>There are no players in this room or you're on a cooldown.</p>
           ) : (
-              players.map(player => <button disabled={disabledInterface} className="items-players" onClick={() => examineItem(player)}>{player}</button>)
+              players.map(player => <button disabled={disabledInterface} className="items-players" onClick={() => examineItem(player)} key={`${roomId}-${Math.random()* title.length}`}>{player}</button>)
           )}
         </div>
 
@@ -97,7 +97,7 @@ const SidebarComponent = props => {
             <p>Inventory:</p>
             {
             inventory.length || !disabledInterface
-            ? inventory.map(inventoryItem => <button disabled={disabledInterface} className="items-players" onClick={() => dropItem(inventoryItem)}>{inventoryItem}</button>)
+            ? inventory.map(inventoryItem => <button disabled={disabledInterface} className="items-players" onClick={() => dropItem(inventoryItem)} key={`${roomId}-${Math.random()* title.length}`}>{inventoryItem}</button>)
             : "Your inventory is empty or you're on a cooldown."
           }
           </div>
