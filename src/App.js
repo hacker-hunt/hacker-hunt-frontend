@@ -162,39 +162,22 @@ class App extends Component {
     }
   };
 
-  // travelToShop = () => {
-  //   setTimeout(async () => {
-  //     const config = {
-  //       method: 'POST',
-  //       headers: {
-  //         Authorization: localStorage.getItem('token'),
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         target_id: 1,
-  //       }),
-  //     };
-  //     const response = await fetch('http://localhost:5000/traverse', config);
-  //     console.log(response);
-  //   }, this.state.cooldown * 1000);
-  // };
-
-  // travelAnywhere = target_id => {
-  //   setTimeout(async () => {
-  //     const config = {
-  //       method: 'POST',
-  //       headers: {
-  //         Authorization: localStorage.getItem('token'),
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         target_id,
-  //       }),
-  //     };
-  //     const response = await fetch('http://localhost:5000/traverse', config);
-  //     console.log(response);
-  //   }, this.state.cooldown * 1000);
-  // };
+  travelToShop = () => {
+    setTimeout(async () => {
+      const config = {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          target_id: 1,
+        }),
+      };
+      await fetch('http://localhost:5000/traverse', config);
+      this.initialRequest();
+    }, this.state.cooldown * 1000);
+  };
 
   sellItem = async () => {
     if (this.state.inventory.length) {
@@ -219,11 +202,12 @@ class App extends Component {
           ...this.state,
           ...json,
         });
+        this.playerStatus();
       }, this.state.cooldown * 1000);
     }
   };
 
-  examineItem = async (name) => {
+  examineItem = async name => {
     try {
       const config = {
         method: 'POST',
@@ -236,8 +220,8 @@ class App extends Component {
         }),
       };
       const response = await fetch(
-          'https://lambda-treasure-hunt.herokuapp.com/api/adv/examine/',
-          config,
+        'https://lambda-treasure-hunt.herokuapp.com/api/adv/examine/',
+        config,
       );
       const jsonResponse = await response.json();
       this.setState(prevState => ({
@@ -247,14 +231,19 @@ class App extends Component {
         cooldown: Math.round(prevState.cooldown + jsonResponse.cooldown),
       }));
     } catch (error) {
-        throw error;
+      throw error;
     }
   };
 
-  takeItem = async (name) => {
-    if (this.state.strength - this.state.encumbrance - this.state.examinedWeight <= 0) {
+  takeItem = async name => {
+    if (
+      this.state.strength -
+        this.state.encumbrance -
+        this.state.examinedWeight <=
+      0
+    ) {
       this.setState({
-        messages: ["You are too encumbered to pick up this item."],
+        messages: ['You are too encumbered to pick up this item.'],
       });
       return;
     }
@@ -274,7 +263,12 @@ class App extends Component {
         config,
       );
       const jsonResponse = await response.json();
-      if (jsonResponse.messages && jsonResponse.messages.length && jsonResponse.errors && !jsonResponse.errors.length) {
+      if (
+        jsonResponse.messages &&
+        jsonResponse.messages.length &&
+        jsonResponse.errors &&
+        !jsonResponse.errors.length
+      ) {
         this.setState(prevState => {
           const pickedUpItem = jsonResponse.messages[0].slice(19);
           const previousItems = [...prevState.items];
@@ -287,7 +281,7 @@ class App extends Component {
             items: [...itemsWithoutPickedUpItem],
             messages: [...jsonResponse.messages],
             cooldown: Math.round(prevState.cooldown + jsonResponse.cooldown),
-          }
+          };
         });
       }
       if (jsonResponse.cooldown) {
@@ -305,7 +299,7 @@ class App extends Component {
     }
   };
 
-  dropItem = async (name) => {
+  dropItem = async name => {
     try {
       const config = {
         method: 'POST',
@@ -318,19 +312,24 @@ class App extends Component {
         }),
       };
       const response = await fetch(
-          'https://lambda-treasure-hunt.herokuapp.com/api/adv/drop/',
-          config,
+        'https://lambda-treasure-hunt.herokuapp.com/api/adv/drop/',
+        config,
       );
       const jsonResponse = await response.json();
       if (jsonResponse.messages && jsonResponse.messages.length) {
-        this.setState((state) => {
+        this.setState(state => {
           const previousItems = [...state.items];
           const droppedItem = jsonResponse.messages[0].slice(17);
           const previousInventory = [...state.inventory];
           const itemInventoryIndex = previousInventory.indexOf(droppedItem);
           const inventoryWithoutDroppedItem = previousInventory
-              .slice(0, itemInventoryIndex)
-              .concat(previousInventory.slice(itemInventoryIndex + 1, previousInventory.length));
+            .slice(0, itemInventoryIndex)
+            .concat(
+              previousInventory.slice(
+                itemInventoryIndex + 1,
+                previousInventory.length,
+              ),
+            );
           return {
             inventory: [...inventoryWithoutDroppedItem],
             items: [...previousItems, droppedItem],
